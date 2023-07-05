@@ -15,7 +15,7 @@ import javax.persistence.GenerationType;
 
 
 @Entity
-@Table(name = "warehouse")
+@Table(name = "WAREHOUSE")
 public class Warehouse {
     
     @Id
@@ -73,8 +73,8 @@ public class Warehouse {
         return warehouseId;
     }
 
-    public void setWarehouseId(long warehouseId) {
-        this.warehouseId = warehouseId;
+    public void setWarehouseId(long warehouse_id) {
+        this.warehouseId = warehouse_id;
     }
 
     public String getName() {

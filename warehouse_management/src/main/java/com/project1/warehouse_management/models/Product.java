@@ -17,7 +17,7 @@ import javax.validation.constraints.Min;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "product")
+@Table(name = "PRODUCT")
 public class Product {
     
     @Id
