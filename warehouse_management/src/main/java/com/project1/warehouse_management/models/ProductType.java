@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "product_type")
+@Table(name = "PRODUCT_TYPE")
 public class ProductType {
     
     @Id
@@ -22,7 +22,7 @@ public class ProductType {
     private long productTypeId;
 
     @Column(name = "value")
-    private int value;
+    private String value;
 
     @JsonBackReference
     @OneToMany(targetEntity = Product.class, mappedBy = "productType")
@@ -32,13 +32,13 @@ public class ProductType {
     public ProductType() {}
 
 
-    public ProductType(int value, Set<Product> products) {
+    public ProductType(String value, Set<Product> products) {
         this.value = value;
         this.products = products;
     }
 
 
-    public ProductType(long productTypeId, int value, Set<Product> products) {
+    public ProductType(long productTypeId, String value, Set<Product> products) {
         this.productTypeId = productTypeId;
         this.value = value;
         this.products = products;
@@ -55,12 +55,12 @@ public class ProductType {
     }
 
 
-    public int getValue() {
+    public String getValue() {
         return value;
     }
 
 
-    public void setValue(int value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
@@ -80,7 +80,7 @@ public class ProductType {
         final int prime = 31;
         int result = 1;
         result = prime * result + (int) (productTypeId ^ (productTypeId >>> 32));
-        result = prime * result + value;
+        result = prime * result + ((value == null) ? 0 : value.hashCode());
         result = prime * result + ((products == null) ? 0 : products.hashCode());
         return result;
     }
@@ -97,7 +97,10 @@ public class ProductType {
         ProductType other = (ProductType) obj;
         if (productTypeId != other.productTypeId)
             return false;
-        if (value != other.value)
+        if (value == null) {
+            if (other.value != null)
+                return false;
+        } else if (!value.equals(other.value))
             return false;
         if (products == null) {
             if (other.products != null)
@@ -112,6 +115,9 @@ public class ProductType {
     public String toString() {
         return "ProductType [productTypeId=" + productTypeId + ", value=" + value + ", products=" + products + "]";
     }
+
+
+    
 
 
 }
