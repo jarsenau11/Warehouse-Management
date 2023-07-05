@@ -24,4 +24,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Transactional(readOnly = true)
     public Optional<List<Item>> findItemsByWarehouseId(long warehouseId);
 
+    
+
 }

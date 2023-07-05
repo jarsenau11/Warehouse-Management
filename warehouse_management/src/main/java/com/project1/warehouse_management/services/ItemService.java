@@ -35,4 +35,14 @@ public class ItemService {
         }
         return null;
     }
+
+    public Item createItem(Item item) {
+        // Product product = 
+        // Warehouse warehouse = 
+        return itemRepository.save(item);
+    }
+
+    public void deleteItem(Item item) {
+        itemRepository.delete(item);
+    }
 }
