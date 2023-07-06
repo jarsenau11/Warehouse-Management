@@ -47,7 +47,18 @@ public class ItemController {
         return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
     }
 
-     @GetMapping("/productType/{productTypeId}")
+    @GetMapping("/product/{productId}")
+    public ResponseEntity<List<Item>> findItemsByProductId(@PathVariable long productId) {
+        List<Item> items = itemService.findItemsByProductId(productId);
+
+        if(items == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
+    }
+
+    @GetMapping("/productType/{productTypeId}")
     public ResponseEntity<List<Item>> findItemsByProductTypeId(@PathVariable long productTypeId) {
         List<Item> items = itemService.findItemsByProductTypeId(productTypeId);
 

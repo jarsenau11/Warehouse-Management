@@ -19,6 +19,10 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Transactional(readOnly = true)
     public Optional<List<Item>> findItemsByWarehouseId(long warehouseId);
 
+    @Query("SELECT i FROM Item i WHERE i.product.productId = :productId")
+    @Transactional(readOnly = true)
+    public Optional<List<Item>> findItemsByProductId(long productId);
+
     @Query("SELECT i FROM Item i WHERE i.product.productType.productTypeId = :productTypeId")
     @Transactional(readOnly = true)
     public Optional<List<Item>> findItemsByProductTypeId(long productTypeId);

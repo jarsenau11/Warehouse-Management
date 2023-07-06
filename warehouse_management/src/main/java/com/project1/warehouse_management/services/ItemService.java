@@ -28,6 +28,15 @@ public class ItemService {
         return null;
     }
 
+    public List<Item> findItemsByProductId(long productId) {
+        Optional<List<Item>> items = itemRepository.findItemsByProductId(productId);
+
+        if(items.isPresent()) {
+            return items.get();
+        }
+        return null;
+    }
+
     public List<Item> findItemsByProductTypeId(long productTypeId) {
         Optional<List<Item>> items = itemRepository.findItemsByProductTypeId(productTypeId);
 
