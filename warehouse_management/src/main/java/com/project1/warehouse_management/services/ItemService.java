@@ -28,6 +28,15 @@ public class ItemService {
         return null;
     }
 
+    public List<Item> findItemsByProductTypeId(long productTypeId) {
+        Optional<List<Item>> items = itemRepository.findItemsByProductTypeId(productTypeId);
+
+        if(items.isPresent()) {
+            return items.get();
+        }
+        return null;
+    }
+
     public Item findById(long itemId) {
         Optional<Item> item = itemRepository.findById(itemId);
         if(item.isPresent()) {
@@ -37,8 +46,10 @@ public class ItemService {
     }
 
     public Item createItem(Item item) {
-        // Product product = 
-        // Warehouse warehouse = 
+        return itemRepository.save(item);
+    }
+
+    public Item updateItem(Item item) {
         return itemRepository.save(item);
     }
 

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +47,17 @@ public class ItemController {
         return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
     }
 
+     @GetMapping("/productType/{productTypeId}")
+    public ResponseEntity<List<Item>> findItemsByProductTypeId(@PathVariable long productTypeId) {
+        List<Item> items = itemService.findItemsByProductTypeId(productTypeId);
+
+        if(items == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
+    }
+
     @GetMapping("/item/{itemId}")
     public ResponseEntity<Item> findByItemId(@PathVariable long itemId) {
         Item item = itemService.findById(itemId);
@@ -56,6 +68,13 @@ public class ItemController {
     public ResponseEntity<Item> createItem(@RequestBody Item item) {
         Item newItem = itemService.createItem(item);
         return new ResponseEntity<Item>(newItem, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/item/updateItem")
+    public ResponseEntity<Item> updateItem(@RequestBody Item item) {
+        Item updatedItem = itemService.updateItem(item);
+        return new ResponseEntity<Item>(updatedItem, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/item/delete/{itemId}")
