@@ -27,13 +27,13 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<Product>> findAllProducts() {
-        List<Product> product =  productService.findAllProducts();
+        List<Product> products =  productService.findAllProducts();
 
-        if(product == null) {
+        if(products == null) {
             return ResponseEntity.noContent().build();
         }
 
-        return new ResponseEntity<List<Product>>(product, HttpStatus.OK);
+        return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
     }
 
     @GetMapping("product/{productId}")

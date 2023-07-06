@@ -27,13 +27,13 @@ public class ProductTypeController {
 
     @GetMapping
     public ResponseEntity<List<ProductType>> findAllProducts() {
-        List<ProductType> productType =  productTypeService.findAllProductTypes();
+        List<ProductType> productTypes =  productTypeService.findAllProductTypes();
 
-        if(productType == null) {
+        if(productTypes == null) {
             return ResponseEntity.noContent().build();
         }
 
-        return new ResponseEntity<List<ProductType>>(productType, HttpStatus.OK);
+        return new ResponseEntity<List<ProductType>>(productTypes, HttpStatus.OK);
     }
 
     @GetMapping("productType/{productTypeId}")

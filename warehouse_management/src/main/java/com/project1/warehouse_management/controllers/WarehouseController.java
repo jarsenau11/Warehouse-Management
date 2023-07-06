@@ -27,13 +27,13 @@ public class WarehouseController {
 
     @GetMapping
     public ResponseEntity<List<Warehouse>> findAllWarehouses() {
-        List<Warehouse> warehouse =  warehouseService.findAllWarehouses();
+        List<Warehouse> warehouses =  warehouseService.findAllWarehouses();
 
-        if(warehouse == null) {
+        if(warehouses == null) {
             return ResponseEntity.noContent().build();
         }
 
-        return new ResponseEntity<List<Warehouse>>(warehouse, HttpStatus.OK);
+        return new ResponseEntity<List<Warehouse>>(warehouses, HttpStatus.OK);
     }
 
     @GetMapping("warehouse/{warehouseId}")
