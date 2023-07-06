@@ -37,13 +37,13 @@ public class WarehouseController {
     }
 
     @GetMapping("warehouse/{warehouseId}")
-    public ResponseEntity<Warehouse> findByItemId(@PathVariable long warehouseId) {
+    public ResponseEntity<Warehouse> findWarehouseById(@PathVariable long warehouseId) {
         Warehouse warehouse = warehouseService.findWarehouseById(warehouseId);
         return new ResponseEntity<Warehouse>(warehouse, HttpStatus.OK);
     }
     
     @PostMapping("/newWarehouse")
-    public ResponseEntity<Warehouse> createItem(@RequestBody Warehouse warehouse) {
+    public ResponseEntity<Warehouse> createWarehouse(@RequestBody Warehouse warehouse) {
         Warehouse newWarehouse = warehouseService.createWarehouse(warehouse);
         return new ResponseEntity<Warehouse>(newWarehouse, HttpStatus.CREATED);
     }
@@ -56,7 +56,7 @@ public class WarehouseController {
     }
 
     @DeleteMapping("/warehouse/delete/{warehouseId}")
-    public ResponseEntity<Warehouse> deleteItem(@PathVariable long warehouseId) {
+    public ResponseEntity<Warehouse> deleteWarehouse(@PathVariable long warehouseId) {
         Warehouse warehouse = warehouseService.findWarehouseById(warehouseId);
         warehouseService.deleteWarehouse(warehouse);
         return new ResponseEntity<Warehouse>(HttpStatus.NO_CONTENT);
