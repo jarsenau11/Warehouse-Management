@@ -1,1 +1,0 @@
-const warehouses = await fetch('http://localhost:8080/warehouses')

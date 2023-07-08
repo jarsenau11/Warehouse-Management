@@ -2,8 +2,16 @@
     box-sizing: border-box;
 }
 
-.container {
-    margin: 1rem;
+.main-container {
+    margin: 2rem;
+    margin-right: 16rem;
+    margin-left: 16rem;
+    text-align: center;
+}
+
+.small-container {
+    margin-right: 20rem;
+    margin-left: 20rem;
     text-align: center;
 }
 
@@ -56,6 +64,26 @@
 }
 
 .pages-div {
-    background-color: #adadad;
+    color: #2B2D2F;
+    display: flex;
+    align-items: center;
+    height: "100%";
 }
 
+.tables-div {
+    margin: 1rem;
+    text-align: center;
+}
+
+.outer-table-headers {
+    font-size:larger;
+}
+
+.round-border {
+    border-radius: 5px !important;
+    overflow: 'hidden';
+}
+
+.column-width-10 {
+    width:10%
+}

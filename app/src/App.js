@@ -6,7 +6,7 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
-import Warehouses from './pages/Warehouses';
+import Inventory from './pages/Inventory';
 import Products from './pages/Products';
 import ProductTypes from './pages/ProductTypes';
 
@@ -15,9 +15,10 @@ const App = () => {
   return (
     <>
       <NavBar />
-      <div className='container'>
+      <div className='main-container'>
         <Routes>
-          <Route path="/warehouses" element={<Warehouses />} />
+          {/* <Route path="/" element={<Inventory />} /> */}
+          <Route path="/inventory" element={<Inventory />} />
           <Route path="/products" element={<Products />} />
           <Route path="/productTypes" element={<ProductTypes />} />
         </Routes>
