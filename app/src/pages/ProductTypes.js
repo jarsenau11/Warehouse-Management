@@ -52,21 +52,33 @@ export default function Products() {
     }, []);
 
     return (
-        <div class="small-container">
+        <div className="small-container">
             {/** find a cool component to appear at the top of the page instead */}
-            <h1 class="text-center">Product Type Management</h1>
+            <h1 className="text-center">Product Type Management</h1>
+            <div className="margin-top margin-bottom">
+                <button className="btn btn-success">Create New Product Type</button>
+            </div>
 
-            <table class="table table-secondary table-bordered">
+            <table className="table table-secondary table-bordered">
                 <thead>
                     <tr>
-                        <th class="outer-table-headers">Product Type</th>
+                        <th className="outer-table-headers">Product Type</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         productTypes.map((productType, p) =>
                             <tr key={p}>
-                                <td>{productType.value}</td>
+                                <td className="column-width-50">{productType.value}</td>
+                                <td className="column-width-25">
+                                    <button type="button" className="margin-right btn btn-primary">
+                                        Update
+                                    </button>
+                                    <button type="button" className="margin-left btn btn-danger">
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         )}
                 </tbody>

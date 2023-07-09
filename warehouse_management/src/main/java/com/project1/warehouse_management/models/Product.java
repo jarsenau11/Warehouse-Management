@@ -2,6 +2,7 @@ package com.project1.warehouse_management.models;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,7 +29,6 @@ public class Product {
     @Column(name = "name")
     private String name;
 
-    // @Column(name = "product_type_id")
     @ManyToOne
     @JoinColumn(name = "product_type_id")
     private ProductType productType;
@@ -45,7 +45,7 @@ public class Product {
     private int size;
 
     @JsonBackReference
-    @OneToMany(targetEntity = Item.class, mappedBy = "product")
+    @OneToMany(targetEntity = Item.class, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Item> items;
 
     public Product() {}

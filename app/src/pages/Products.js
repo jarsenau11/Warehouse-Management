@@ -43,15 +43,19 @@ export default function Products() {
         <div>
             {/** find a cool component to appear at the top of the page instead */}
             <h1>Product Management</h1>
+            <div className="margin-top margin-bottom">
+                <button className="btn btn-success">Create New Product</button>
+            </div>
 
-            <table class="table table-secondary table-bordered">
+            <table className="table table-secondary table-bordered">
                 <thead>
                     <tr>
-                        <th class="outer-table-headers">Product Name</th>
-                        <th class="column-width-10 outer-table-headers">Product Type</th>
-                        <th class="outer-table-headers">Description</th>
-                        <th class="outer-table-headers">Price</th>
-                        <th class="outer-table-headers">Size</th>
+                        <th className="outer-table-headers">Product Name</th>
+                        <th className="column-width-10 outer-table-headers">Product Type</th>
+                        <th className="outer-table-headers">Description</th>
+                        <th className="outer-table-headers">Price</th>
+                        <th className="outer-table-headers">Size</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,6 +67,14 @@ export default function Products() {
                                 <td>{product.description}</td>
                                 <td>{'$' + product.price}</td>
                                 <td>{product.size}</td>
+                                <td className="column-width-20">
+                                    <button type="button" className="margin-right btn btn-primary">
+                                        Update
+                                    </button>
+                                    <button type="button" className="margin-left btn btn-danger">
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
                         )}
                 </tbody>

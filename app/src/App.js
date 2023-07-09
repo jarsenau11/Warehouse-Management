@@ -15,9 +15,9 @@ const App = () => {
   return (
     <>
       <NavBar />
-      <div className='main-container'>
+      <div className='inner-container'>
         <Routes>
-          {/* <Route path="/" element={<Inventory />} /> */}
+          <Route path="/" element={<Inventory />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/products" element={<Products />} />
           <Route path="/productTypes" element={<ProductTypes />} />

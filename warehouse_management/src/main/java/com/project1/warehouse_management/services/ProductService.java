@@ -39,4 +39,8 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    // public void deleteProductByProductTypeId(long productTypeId) {
+    //     productRepository.deleteByProductTypeId(productTypeId);
+    // }
+
 }

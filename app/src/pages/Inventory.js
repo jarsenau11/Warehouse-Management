@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+import CustomModal from "../components/Modal";
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Row from 'react-bootstrap/Row';
 
 export default function Inventory() {
     const [warehouses, setWarehouses] = useState([]);
@@ -8,6 +14,18 @@ export default function Inventory() {
     // const [error, setError] = useState();
 
     const [productsByWarehouse, setProductsByWarehouse] = useState([]);
+
+    const [validated, setValidated] = useState(false);
+
+    const handleSubmit = (event) => {
+        const form = event.currentTarget;
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        setValidated(true);
+    };
 
     useEffect(() => {
         fetch('warehouses')
@@ -89,20 +107,88 @@ export default function Inventory() {
         <div>
             {/** find a cool component to appear at the top of the page instead */}
             <h1>Inventory Management</h1>
-            <div>
-                <button>Add Warehouse</button>
+            <div className="margin-top margin-bottom">
+
+                <CustomModal
+                    buttonTitle="Add New Warehouse"
+                    action="createWarehouse"
+                    modalHeading="Add New Warehouse"
+                    submitButtonVariant="primary"
+                    cancelButtonVariant="secondary"
+                    modalBody={
+                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                            <Row className="mb-3">
+                                <Form.Group as={Col} md="8" controlId="validationCustom01">
+                                    <Form.Label>Warehouse Name</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="text"
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        There is already a warehouse with this name
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group as={Col} md="4" controlId="validationCustom02">
+                                    <Form.Label>Capacity</Form.Label>
+                                    <Form.Control
+                                        required
+                                        type="number"
+                                    />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide a valid capacity.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Row>
+                            <Row className="mb-3">
+                                <Form.Group as={Col} md="7" controlId="validationCustom03">
+                                    <Form.Label>Street</Form.Label>
+                                    <Form.Control type="text" required />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide a valid street.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group as={Col} md="5" controlId="validationCustom04">
+                                    <Form.Label>City</Form.Label>
+                                    <Form.Control type="text" required />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide a valid city.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Row>
+                            <Row>
+                                <Form.Group as={Col} md="6" controlId="validationCustom05">
+                                    <Form.Label>State</Form.Label>
+                                    <Form.Control type="text" required />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide a valid state.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                                <Form.Group as={Col} md="6" controlId="validationCustom06">
+                                    <Form.Label>Zip</Form.Label>
+                                    <Form.Control type="number" required />
+                                    <Form.Control.Feedback type="invalid">
+                                        Please provide a valid zip.
+                                    </Form.Control.Feedback>
+                                </Form.Group>
+                            </Row>
+                        </Form>
+                    }
+                handleSubmit={handleSubmit}
+                >
+                </CustomModal>
             </div>
             {
                 warehouses.map((warehouse, w) =>
-                    <table key={w} class="table table-dark table-bordered">
+                    <table key={w} className="table table-dark table-bordered">
                         <thead>
                             <tr>
-                                <th class="outer-table-headers">Warehouse Name</th>
-                                <th class="outer-table-headers">Street</th>
-                                <th class="outer-table-headers">City</th>
-                                <th class="outer-table-headers">State</th>
-                                <th class="outer-table-headers">Zip</th>
-                                <th class="outer-table-headers">Capacity</th>
+                                <th className="outer-table-headers">Warehouse Name</th>
+                                <th className="outer-table-headers">Street</th>
+                                <th className="outer-table-headers">City</th>
+                                <th className="outer-table-headers">State</th>
+                                <th className="outer-table-headers">Zip</th>
+                                <th className="outer-table-headers">Capacity</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,10 +199,15 @@ export default function Inventory() {
                                 <td>{warehouse.state}</td>
                                 <td>{warehouse.zip}</td>
                                 <td>{getInventoryCountSum(warehouse.warehouseId) + '/' + warehouse.capacity}</td>
+                                <td>
+                                    <button type="button" className="btn btn-success">
+                                        Update Warehouse
+                                    </button>
+                                </td>
                             </tr>
                             <tr>
-                                <td colspan="6">
-                                    <table class="table table-secondary table-bordered">
+                                <td colSpan="7">
+                                    <table className="table table-secondary table-bordered">
                                         <thead>
                                             <tr>
                                                 <th>Product Name</th>
@@ -134,7 +225,11 @@ export default function Inventory() {
                                                         <td>{'$' + product.price}</td>
                                                         <td>{product.size}</td>
                                                         <td>{getItemCountByProductAndWarehouse(warehouse.warehouseId, product.productId)}</td>
-                                                        <td>Update Stock</td>
+                                                        <td>
+                                                            <button type="button" className="btn btn-primary">
+                                                                Update Stock
+                                                            </button>
+                                                        </td>
                                                     </tr>
                                                 )}
                                         </tbody>

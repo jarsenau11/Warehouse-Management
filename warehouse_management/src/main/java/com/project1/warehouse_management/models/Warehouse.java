@@ -2,6 +2,7 @@ package com.project1.warehouse_management.models;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,7 +43,7 @@ public class Warehouse {
     private int zip;
 
     @JsonBackReference
-    @OneToMany(targetEntity = Item.class, mappedBy = "warehouse")
+    @OneToMany(targetEntity = Item.class, mappedBy = "warehouse", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Item> items;
 
     public Warehouse() {}
