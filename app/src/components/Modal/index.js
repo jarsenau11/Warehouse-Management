@@ -23,7 +23,7 @@ function CustomModal(props) {
           <Button variant={props.cancelButtonVariant} onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant={props.submitButtonVariant} onClick={props.handleSubmit}>
+          <Button variant={props.submitButtonVariant} onClick={function(){props.handleSubmit(); handleClose()}}>
             Confirm
           </Button>
         </Modal.Footer>
