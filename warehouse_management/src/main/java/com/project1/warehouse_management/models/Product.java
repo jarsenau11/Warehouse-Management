@@ -2,7 +2,6 @@ package com.project1.warehouse_management.models;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -45,7 +44,7 @@ public class Product {
     private int size;
 
     @JsonBackReference
-    @OneToMany(targetEntity = Item.class, mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = Item.class, mappedBy = "product")
     private Set<Item> items;
 
     public Product() {}

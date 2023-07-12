@@ -11,63 +11,104 @@ export default function Products() {
     const [productTypes, setProductTypes] = useState([]);
     // const [error, setError] = useState();
 
-    const [newProductFormData, setNewProductFormData] = useState(
-    //     {
-    //     name: '',
-    //     productType: {},
-    //     description: '',
-    //     price: 0,
-    //     size: 0
-    // }
+    const [productFormData, setproductFormData] = useState(
+        {
+            name: '',
+            productType: {},
+            description: '',
+            price: 0,
+            size: 0
+        }
     );
 
     const [validated, setValidated] = useState(false);
 
-    const handleSubmit = (event) => {
+    const handleNewProductSubmit = (event) => {
+        // for(const prop in productFormData) {
+        //     console.log(`${prop}: ${productFormData[prop]}`)
+        // }
         // const form = event.currentTarget;
         // if (form.checkValidity() === false) {
         //     event.preventDefault();
         //     event.stopPropagation();
         // }
 
-        // fetch('productTypes/newProductType', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(newProductFormData)
-        // })
-        //     .then((res) => res.json())
-        //     .then((data) => {
-        //         setProducts([...products, ...data]);
-        //     })
-        //     .catch((err) => {
-        //         console.log(err.message);
-        //     });
-
-        console.log(newProductFormData);
+        fetch('products/newProduct', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(productFormData)
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setProducts([...products, ...data]);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
 
         setValidated(true);
 
     };
 
-    const test = (event) => {
-        console.log(event.target.value)
-        // console.log(JSON.parse(event.target.value))
+    const handleUpdateProductSubmit = (event) => {
+        // if(updateProductTypeFormData.value exists (loop through productTypes)) { error } else {
+            console.log(JSON.stringify(productFormData))
+
+        fetch('products/product/updateProduct', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(productFormData)
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                for (let i = 0; i < products.length; i++) {
+                    if (products[i].productId == data.productId) {
+                        products[i].name = data.name
+                        products[i].productType = data.productType
+                        products[i].description = data.description
+                        products[i].price = data.price
+                        products[i].size = data.size
+                        break
+                    }
+                }
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+
+        setValidated(true);
+    };
+
+    const handleUpdateSetId = (productId) => {
+        setproductFormData({
+            ...productFormData,
+            "productId": productId
+        })
     }
 
-    const handleInputChange = (event) => {
-        setNewProductFormData({
-            ...newProductFormData,
-            [event.target.name]: event.target.value,
-            // 'name': event.target.name,
-            // 'productType': event.target.type,
-            // 'description': event.target.description,
-            // 'price': event.target.price,
-            // 'size': event.target.size
+    const handleJsonInputChange = (event) => {
+        setproductFormData({
+            ...productFormData,
+            [event.target.name]: JSON.parse(event.target.value),
         })
-        // console.log(newProductFormData)
-        // console.log(newProductFormData.productType)
+    }
+
+    const handleStringInputChange = (event) => {
+        setproductFormData({
+            ...productFormData,
+            [event.target.name]: event.target.value,
+        })
+    }
+
+    const handleNumberInputChange = (event) => {
+        setproductFormData({
+            ...productFormData,
+            [event.target.name]: parseInt(event.target.value),
+        })
     }
 
     useEffect(() => {
@@ -121,13 +162,14 @@ export default function Products() {
             <h1>Product Management</h1>
             <div className="margin-top margin-bottom">
                 <CustomModal
+                    buttonVariant="success"
                     buttonTitle="Add New Product"
                     action="createProduct"
                     modalHeading="Add New Product"
                     submitButtonVariant="primary"
                     cancelButtonVariant="secondary"
                     modalBody={
-                        <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                        <Form noValidate validated={validated} onSubmit={handleNewProductSubmit}>
                             <Row className="mb-3">
                                 <Form.Group as={Col} md="6" controlId="name">
                                     <Form.Label>Name</Form.Label>
@@ -136,7 +178,7 @@ export default function Products() {
                                         name="name"
                                         type="text"
                                         className="form-control"
-                                        onChange={handleInputChange}
+                                        onChange={handleStringInputChange}
                                     />
                                     {/* <Form.Control.Feedback type="invalid">
                                         Please enter a value that does not match an existing product name
@@ -144,10 +186,10 @@ export default function Products() {
                                 </Form.Group>
                                 <Form.Group as={Col} md="6" controlId="type">
                                     <Form.Label>Type</Form.Label>
-                                    <Form.Select aria-label="Product Type" name="productType" onChange={test}>
+                                    <Form.Select aria-label="Product Type" name="productType" onChange={handleJsonInputChange}>
                                         <option>Select a product type</option>
                                         {productTypes.map((productType) => (
-                                            <option key={productType.productTypeId} value={productType}>{productType.value}</option>
+                                            <option key={productType.productTypeId} value={JSON.stringify(productType)}>{productType.value}</option>
                                         ))}
                                     </Form.Select>
 
@@ -159,54 +201,54 @@ export default function Products() {
                             </Row>
 
                             <Row className="mb-3">
-                            <Form.Group as={Col} md="12" controlId="description">
-                                <Form.Label>Description</Form.Label>
-                                <Form.Control
-                                    required
-                                    name="description"
-                                    type="text"
-                                    className="form-control"
-                                    onChange={handleInputChange}
-                                />
-                                {/* <Form.Control.Feedback type="invalid">
+                                <Form.Group as={Col} md="12" controlId="description">
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control
+                                        required
+                                        name="description"
+                                        type="text"
+                                        className="form-control"
+                                        onChange={handleStringInputChange}
+                                    />
+                                    {/* <Form.Control.Feedback type="invalid">
 
                                     </Form.Control.Feedback> */}
-                            </Form.Group>
+                                </Form.Group>
                             </Row>
 
 
                             <Row className="mb-3">
-                            <Form.Group as={Col} md="6" controlId="price">
-                                <Form.Label>Price</Form.Label>
-                                <Form.Control
-                                    required
-                                    name="price"
-                                    type="text"
-                                    className="form-control"
-                                    onChange={handleInputChange}
-                                />
-                                {/* <Form.Control.Feedback type="invalid">
+                                <Form.Group as={Col} md="6" controlId="price">
+                                    <Form.Label>Price</Form.Label>
+                                    <Form.Control
+                                        required
+                                        name="price"
+                                        type="number"
+                                        className="form-control"
+                                        onChange={handleNumberInputChange}
+                                    />
+                                    {/* <Form.Control.Feedback type="invalid">
                                     
                                     </Form.Control.Feedback> */}
-                            </Form.Group>
-                            <Form.Group as={Col} md="6" controlId="size">
-                                <Form.Label>Size</Form.Label>
-                                <Form.Control
-                                    required
-                                    name="size"
-                                    type="number"
-                                    className="form-control"
-                                    onChange={handleInputChange}
-                                />
-                                {/* <Form.Control.Feedback type="invalid">
+                                </Form.Group>
+                                <Form.Group as={Col} md="6" controlId="size">
+                                    <Form.Label>Size</Form.Label>
+                                    <Form.Control
+                                        required
+                                        name="size"
+                                        type="number"
+                                        className="form-control"
+                                        onChange={handleNumberInputChange}
+                                    />
+                                    {/* <Form.Control.Feedback type="invalid">
                                     
                                     </Form.Control.Feedback> */}
-                            </Form.Group>
+                                </Form.Group>
                             </Row>
 
                         </Form>
                     }
-                    handleSubmit={handleSubmit} // this needs to be if(validated)
+                    handleSubmit={handleNewProductSubmit} // this needs to be if(validated)
                 >
                 </CustomModal>
             </div>
@@ -232,9 +274,101 @@ export default function Products() {
                                 <td>{'$' + product.price}</td>
                                 <td>{product.size}</td>
                                 <td className="column-width-20">
-                                    <button type="button" className="margin-right btn btn-primary">
-                                        Update
-                                    </button>
+                                    <CustomModal
+                                        buttonVariant="primary"
+                                        buttonTitle="Update"
+                                        action="updateProduct"
+                                        modalHeading="Update Product"
+                                        submitButtonVariant="primary"
+                                        cancelButtonVariant="secondary"
+                                        productId={product.productId}
+                                        modalBody={
+                                            <Form noValidate validated={validated} onSubmit={handleUpdateProductSubmit}>
+                                                <Row className="mb-3">
+                                                    <Form.Group as={Col} md="6" controlId="name">
+                                                        <Form.Label>Name</Form.Label>
+                                                        <Form.Control
+                                                            required
+                                                            defaultValue={product.name}
+                                                            name="name"
+                                                            type="text"
+                                                            className="form-control"
+                                                            onChange={handleStringInputChange}
+                                                        />
+                                                        {/* <Form.Control.Feedback type="invalid">
+                                        Please enter a value that does not match an existing product name
+                                    </Form.Control.Feedback> */}
+                                                    </Form.Group>
+                                                    <Form.Group as={Col} md="6" controlId="type">
+                                                        <Form.Label>Type</Form.Label>
+                                                        <Form.Select aria-label="Product Type" name="productType" defaultValue={product.productType.value} onChange={handleJsonInputChange}>
+                                                            {/* <option>Select a product type</option> */}
+                                                            {productTypes.map((productType) => (
+                                                                <option key={productType.productTypeId} value={JSON.stringify(productType)}>{productType.value}</option>
+                                                            ))}
+                                                        </Form.Select>
+
+
+                                                        {/* <Form.Control.Feedback type="invalid">
+                                        
+                                    </Form.Control.Feedback> */}
+                                                    </Form.Group>
+                                                </Row>
+
+                                                <Row className="mb-3">
+                                                    <Form.Group as={Col} md="12" controlId="description">
+                                                        <Form.Label>Description</Form.Label>
+                                                        <Form.Control
+                                                            required
+                                                            name="description"
+                                                            defaultValue={product.description}
+                                                            type="text"
+                                                            className="form-control"
+                                                            onChange={handleStringInputChange}
+                                                        />
+                                                        {/* <Form.Control.Feedback type="invalid">
+
+                                    </Form.Control.Feedback> */}
+                                                    </Form.Group>
+                                                </Row>
+
+
+                                                <Row className="mb-3">
+                                                    <Form.Group as={Col} md="6" controlId="price">
+                                                        <Form.Label>Price</Form.Label>
+                                                        <Form.Control
+                                                            required
+                                                            name="price"
+                                                            defaultValue={product.price}
+                                                            type="number"
+                                                            className="form-control"
+                                                            onChange={handleNumberInputChange}
+                                                        />
+                                                        {/* <Form.Control.Feedback type="invalid">
+                                    
+                                    </Form.Control.Feedback> */}
+                                                    </Form.Group>
+                                                    <Form.Group as={Col} md="6" controlId="size">
+                                                        <Form.Label>Size</Form.Label>
+                                                        <Form.Control
+                                                            required
+                                                            name="size"
+                                                            defaultValue={product.size}
+                                                            type="number"
+                                                            className="form-control"
+                                                            onChange={handleNumberInputChange}
+                                                        />
+                                                        {/* <Form.Control.Feedback type="invalid">
+                                    
+                                    </Form.Control.Feedback> */}
+                                                    </Form.Group>
+                                                </Row>
+
+                                            </Form>
+                                        }
+                                        handleSubmit={handleUpdateProductSubmit} // this needs to be if(validated)
+                                    >
+                                    </CustomModal>
                                     <button type="button" className="margin-left btn btn-danger">
                                         Delete
                                     </button>

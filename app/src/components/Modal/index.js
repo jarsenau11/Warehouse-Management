@@ -10,7 +10,7 @@ function CustomModal(props) {
 
   return (
     <>
-      <Button variant="success" onClick={handleShow}>
+      <Button variant={props.buttonVariant} onClick={function() {handleShow(); props.handleUpdate()}}>
         {props.buttonTitle}
       </Button>
 
