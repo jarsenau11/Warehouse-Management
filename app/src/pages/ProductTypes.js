@@ -14,14 +14,9 @@ export default function Products() {
     const [updateProductTypeFormData, setUpdateProductTypeFormData] = useState({});
     const [deleteProductType, setDeleteProductType] = useState();
 
-    const [validated, setValidated] = useState(false);
+    // const [validated, setValidated] = useState(false);
 
     const handleNewProductTypeSubmit = (event) => {
-        // const form = event.currentTarget;
-        // if (form.checkValidity() === false) {
-        //     event.preventDefault();
-        //     event.stopPropagation();
-        // }
 
         fetch('productTypes/newProductType', {
             method: 'POST',
@@ -32,13 +27,16 @@ export default function Products() {
         })
             .then((res) => res.json())
             .then((data) => {
-                setProductTypes([...productTypes, ...data]);
+                setProductTypes((oldState) => {
+                    return [...oldState, data]
+                })
+                event.target.reset();
             })
             .catch((err) => {
                 console.log(err.message);
             });
 
-        setValidated(true);
+        // setValidated(true);
 
     };
 
@@ -55,8 +53,8 @@ export default function Products() {
         })
             .then((res) => res.json())
             .then((data) => {
-                for(let i = 0; i < productTypes.length; i++) {
-                    if(productTypes[i].productTypeId == data.productTypeId) {
+                for (let i = 0; i < productTypes.length; i++) {
+                    if (productTypes[i].productTypeId == data.productTypeId) {
                         productTypes[i].value = data.value
                         break
                     }
@@ -66,7 +64,7 @@ export default function Products() {
                 console.log(err.message);
             });
 
-        setValidated(true);
+        // setValidated(true);
 
         console.log(updateProductTypeFormData)
 
@@ -74,22 +72,22 @@ export default function Products() {
 
     const handleDeleteProductTypeSubmit = (event) => {
 
-        fetch('productTypes/productType/updateProductType/delete/' + deleteProductType.productTypeId, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify() // add object here
-        })
-            .then((res) => res.json())
-            .then((data) => setProductTypes((current) => current.filter((productType => productType.productTypeId != data.productTypeId))))
-            .catch((err) => {
-                console.log(err.message);
-            });
+        const data = new FormData(event.target)
+        // console.log(event.target.id)
+        // fetch('productTypes/productType/updateProductType/delete/' + deleteProductType.productTypeId, {
+        //     method: 'DELETE',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify() // add object here
+        // })
+        // .then((res) => res.json())
+        // .then((data) => setProductTypes((current) => current.filter((productType => productType.productTypeId != data.productTypeId))))
+        // .catch((err) => {
+        //     console.log(err.message);
+        // });
 
-        setValidated(true);
-
-        console.log(updateProductTypeFormData)
+        // setValidated(true);
 
     };
 
@@ -164,7 +162,10 @@ export default function Products() {
                     submitButtonVariant="primary"
                     cancelButtonVariant="secondary"
                     modalBody={
-                        <Form noValidate validated={validated} onSubmit={handleNewProductTypeSubmit}>
+                        <Form
+                            // noValidate validated={validated}
+                            onSubmit={handleNewProductTypeSubmit}
+                        >
                             <Row className="mb-3">
                                 <Form.Group as={Col} md="8" controlId="productType">
                                     <Form.Label>Product Type</Form.Label>
@@ -206,7 +207,10 @@ export default function Products() {
                                         submitButtonVariant="primary"
                                         cancelButtonVariant="secondary"
                                         modalBody={
-                                            <Form noValidate validated={validated} onSubmit={handleUpdateProductTypeSubmit}>
+                                            <Form
+                                                // noValidate validated={validated}
+                                                onSubmit={handleUpdateProductTypeSubmit}
+                                            >
                                                 <Row className="mb-3">
                                                     <Form.Group as={Col} md="8">
                                                         <Form.Label>Product Type</Form.Label>
@@ -236,10 +240,20 @@ export default function Products() {
                                         cancelButtonVariant="secondary"
                                         buttonVariant="danger"
                                         modalBody={
-                                            <Form noValidate validated={validated} onSubmit={handleDeleteProductTypeSubmit}>
+                                            <Form
+                                                // noValidate validated={validated} 
+                                                onSubmit={handleDeleteProductTypeSubmit}
+                                            >
                                                 <Row className="mb-3">
-                                                    <Form.Group as={Col} md="8" id={productType.productTypeId}>
-                                                        <Form.Label>Are you sure you want to delete this Product Type?</Form.Label>
+                                                    <Form.Group as={Col} md="12">
+                                                        <Form.Label>Are you sure you want to delete this product type?</Form.Label>
+                                                        <Form.Control
+                                                            disabled
+                                                            value={productType.value}
+                                                            // id={productType.productTypeId}
+                                                            type="text"
+                                                            className="form-control"
+                                                        />
                                                     </Form.Group>
                                                 </Row>
                                             </Form>

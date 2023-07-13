@@ -11,6 +11,8 @@ export default function Products() {
     const [productTypes, setProductTypes] = useState([]);
     // const [error, setError] = useState();
 
+    const [productSize, setProductSize] = useState(1);
+
     const [productFormData, setproductFormData] = useState(
         {
             name: '',
@@ -21,17 +23,9 @@ export default function Products() {
         }
     );
 
-    const [validated, setValidated] = useState(false);
+    // const [validated, setValidated] = useState(false);
 
     const handleNewProductSubmit = (event) => {
-        // for(const prop in productFormData) {
-        //     console.log(`${prop}: ${productFormData[prop]}`)
-        // }
-        // const form = event.currentTarget;
-        // if (form.checkValidity() === false) {
-        //     event.preventDefault();
-        //     event.stopPropagation();
-        // }
 
         fetch('products/newProduct', {
             method: 'POST',
@@ -42,15 +36,19 @@ export default function Products() {
         })
             .then((res) => res.json())
             .then((data) => {
-                setProducts([...products, ...data]);
+                setProducts((oldState) => {
+                    return [...oldState, data]
+                })
+                event.target.reset();
             })
             .catch((err) => {
                 console.log(err.message);
             });
 
-        setValidated(true);
+        // setValidated(true);
 
     };
+
 
     const handleUpdateProductSubmit = (event) => {
         // if(updateProductTypeFormData.value exists (loop through productTypes)) { error } else {
@@ -66,6 +64,7 @@ export default function Products() {
             .then((res) => res.json())
             .then((data) => {
                 for (let i = 0; i < products.length; i++) {
+                    // this isn't working properly
                     if (products[i].productId == data.productId) {
                         products[i].name = data.name
                         products[i].productType = data.productType
@@ -75,14 +74,17 @@ export default function Products() {
                         break
                     }
                 }
+                event.target.reset();
             })
             .catch((err) => {
                 console.log(err.message);
             });
 
-        setValidated(true);
+        // setValidated(true);
     };
 
+
+    
     const handleUpdateSetId = (productId) => {
         setproductFormData({
             ...productFormData,
@@ -105,10 +107,13 @@ export default function Products() {
     }
 
     const handleNumberInputChange = (event) => {
-        setproductFormData({
-            ...productFormData,
-            [event.target.name]: parseInt(event.target.value),
-        })
+        if(parseInt(event.target.value) <= 5 && parseInt(event.target.value) >= 1) {
+            setProductSize(event.target.value)
+            setproductFormData({
+                ...productFormData,
+                [event.target.name]: parseInt(event.target.value)
+            })
+        }
     }
 
     useEffect(() => {
@@ -169,7 +174,10 @@ export default function Products() {
                     submitButtonVariant="primary"
                     cancelButtonVariant="secondary"
                     modalBody={
-                        <Form noValidate validated={validated} onSubmit={handleNewProductSubmit}>
+                        <Form
+                        //  noValidate validated={validated}
+                         onSubmit={handleNewProductSubmit}
+                         >
                             <Row className="mb-3">
                                 <Form.Group as={Col} md="6" controlId="name">
                                     <Form.Label>Name</Form.Label>
@@ -235,6 +243,7 @@ export default function Products() {
                                     <Form.Label>Size</Form.Label>
                                     <Form.Control
                                         required
+                                        value={productSize}
                                         name="size"
                                         type="number"
                                         className="form-control"
@@ -283,7 +292,10 @@ export default function Products() {
                                         cancelButtonVariant="secondary"
                                         productId={product.productId}
                                         modalBody={
-                                            <Form noValidate validated={validated} onSubmit={handleUpdateProductSubmit}>
+                                            <Form
+                                            // noValidate validated={validated}
+                                            onSubmit={handleUpdateProductSubmit}
+                                            >
                                                 <Row className="mb-3">
                                                     <Form.Group as={Col} md="6" controlId="name">
                                                         <Form.Label>Name</Form.Label>

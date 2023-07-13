@@ -8,9 +8,11 @@ function CustomModal(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const test = props.handleInitialButtonClick;
+
   return (
     <>
-      <Button variant={props.buttonVariant} onClick={function() {handleShow(); props.handleUpdate()}}>
+      <Button variant={props.buttonVariant} onClick={function(){handleShow(); if(test == null){} else{test()}}}>
         {props.buttonTitle}
       </Button>
 
@@ -23,7 +25,7 @@ function CustomModal(props) {
           <Button variant={props.cancelButtonVariant} onClick={handleClose}>
             Cancel
           </Button>
-          <Button variant={props.submitButtonVariant} onClick={function(){props.handleSubmit(); handleClose()}}>
+          <Button variant={props.submitButtonVariant} onClick={function(){if(props.handleSubmit == null){} else {props.handleSubmit()}; handleClose()}}>
             Confirm
           </Button>
         </Modal.Footer>

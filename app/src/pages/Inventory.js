@@ -3,6 +3,8 @@ import CustomModal from "../components/Modal";
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import UpdateStockForm from "../components/warehouses/UpdateStockForm";
+import AddNewItem from "../components/warehouses/AddNewItem";
 
 export default function Inventory() {
     const [warehouses, setWarehouses] = useState([]);
@@ -15,12 +17,19 @@ export default function Inventory() {
 
     const [warehouseFormData, setWarehouseFormData] = useState([]);
 
-    const [validated, setValidated] = useState(false);
+    // const [validated, setValidated] = useState(false);
 
+    const [newItemFormData, setNewItemFormData] = useState(
+        {
+            product: {},
+            warehouse: {}
+        }
+    );
+
+    const [warehouseToAddTo, setWarehouseToAddTo] = useState()
+    const [newItemCount, setNewItemCount] = useState(0)
 
     const handleNewWarehouseSubmit = (event) => {
-
-        console.log(warehouseFormData)
 
         fetch('warehouses/newWarehouse', {
             method: 'POST',
@@ -31,20 +40,20 @@ export default function Inventory() {
         })
             .then((res) => res.json())
             .then((data) => {
-                setWarehouses([...warehouses, ...data]);
+                setWarehouses((oldState) => {
+                    return [...oldState, data]
+                })
+                event.target.reset();
             })
             .catch((err) => {
                 console.log(err.message);
             });
 
-        setValidated(true);
+        // setValidated(true);
 
     };
 
     const handleUpdateWarehouseSubmit = (event) => {
-        // if(updateProductTypeFormData.value exists (loop through productTypes)) { error } else {
-            console.log(JSON.stringify(warehouseFormData))
-
         fetch('warehouses/warehouse/updateWarehouse', {
             method: 'PUT',
             headers: {
@@ -68,11 +77,57 @@ export default function Inventory() {
             .catch((err) => {
                 console.log(err.message);
             });
-
-        setValidated(true);
+        // setValidated(true);
     };
 
+    const handleAddItemSubmit = (event) => {
+        console.log(event)
+        // if itemCount * itemSize + warehouse stock > capacity, error
+    }
+
+    async function addItems() {
+        for (let i = 0; i < newItemCount; i++) {
+            const response = await fetch('items/newItem', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newItemFormData)
+            })
+                .then((res) => res.json())
+                .then((data) => {
+
+
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+        }
+    }
+
+    // handleUpdateStockChange = (event) => {
+
+    // }
+
+    // handleUpdateStockSubmit = (event) => {
+
+    // }
+
+    function handleAddItem(newItem) {
+        setItems((oldState) => {
+            return [...oldState, newItem]
+        })
+    }
+
+    const handleProductChange = (event) => {
+        setNewItemFormData({
+            ...newItemFormData,
+            [event.target.name]: JSON.parse(event.target.value),
+        })
+    }
+
     const handleStringInputChange = (event) => {
+        console.log(event.target.value)
         setWarehouseFormData({
             ...warehouseFormData,
             [event.target.name]: event.target.value,
@@ -151,6 +206,16 @@ export default function Inventory() {
         return productsUnion;
     }
 
+    const getItemsByWarehouseIdAndProductId = (warehouseId, productId) => {
+        let filteredItems = [];
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].warehouse.warehouseId === warehouseId && items[i].product.productId === productId) {
+                filteredItems.push(items[i])
+            }
+        }
+        return filteredItems;
+    }
+
     const getInventoryCountSum = (warehouseId) => {
         let sum = 0;
         for (let i = 0; i < items.length; i++) {
@@ -176,7 +241,9 @@ export default function Inventory() {
                     submitButtonVariant="primary"
                     cancelButtonVariant="secondary"
                     modalBody={
-                        <Form noValidate validated={validated} onSubmit={handleNewWarehouseSubmit}>
+                        <Form
+                        // noValidate validated={validated} onSubmit={handleNewWarehouseSubmit}
+                        >
                             <Row className="mb-3">
                                 <Form.Group as={Col} md="8" controlId="validationCustom01">
                                     <Form.Label>Warehouse Name</Form.Label>
@@ -272,7 +339,10 @@ export default function Inventory() {
                                         submitButtonVariant="primary"
                                         cancelButtonVariant="secondary"
                                         modalBody={
-                                            <Form noValidate validated={validated} onSubmit={handleUpdateWarehouseSubmit}>
+                                            <Form
+                                                // noValidate validated={validated} 
+                                                onSubmit={handleUpdateWarehouseSubmit}
+                                            >
                                                 <Row className="mb-3">
                                                     <Form.Group as={Col} md="8" controlId="validationCustom01">
                                                         <Form.Label>Warehouse Name</Form.Label>
@@ -283,9 +353,9 @@ export default function Inventory() {
                                                             defaultValue={warehouse.name}
                                                             onChange={handleStringInputChange}
                                                         />
-                                                        <Form.Control.Feedback type="invalid">
+                                                        {/* <Form.Control.Feedback type="invalid">
                                                             There is already a warehouse with this name
-                                                        </Form.Control.Feedback>
+                                                        </Form.Control.Feedback> */}
                                                     </Form.Group>
                                                     <Form.Group as={Col} md="4" controlId="validationCustom02">
                                                         <Form.Label>Capacity</Form.Label>
@@ -338,6 +408,16 @@ export default function Inventory() {
                                         handleSubmit={handleUpdateWarehouseSubmit}
                                     >
                                     </CustomModal>
+
+                                    <div style={{marginBottom:"1rem"}}></div>
+
+                                    <AddNewItem
+                                        warehouse={warehouse} 
+                                        products={products}
+                                        inventoryCountSum={getInventoryCountSum(warehouse.warehouseId)}
+                                        items={items}
+                                        handleAddItem={handleAddItem}
+                                    ></AddNewItem>
                                 </td>
                             </tr>
                             <tr>
@@ -361,9 +441,13 @@ export default function Inventory() {
                                                         <td>{product.size}</td>
                                                         <td>{getItemCountByProductAndWarehouse(warehouse.warehouseId, product.productId)}</td>
                                                         <td>
-                                                            <button type="button" className="btn btn-primary">
-                                                                Update Stock
-                                                            </button>
+                                                            <UpdateStockForm
+                                                                warehouse={warehouse} 
+                                                                product={product}
+                                                                existingCount={getItemCountByProductAndWarehouse(warehouse.warehouseId, product.productId)}
+                                                                inventoryCountSum={getInventoryCountSum(warehouse.warehouseId)}
+                                                                items={getItemsByWarehouseIdAndProductId(warehouse.warehouseId, product.productId)}
+                                                            ></UpdateStockForm>
                                                         </td>
                                                     </tr>
                                                 )}

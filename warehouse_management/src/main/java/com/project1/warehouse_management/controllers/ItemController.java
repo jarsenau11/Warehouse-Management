@@ -81,6 +81,12 @@ public class ItemController {
         return new ResponseEntity<Item>(newItem, HttpStatus.CREATED);
     }
 
+    @PostMapping("/newItems")
+    public ResponseEntity<List<Item>> createItem(@RequestBody List<Item> items) {
+        List<Item> newItems = itemService.createItems(items);
+        return new ResponseEntity<List<Item>>(newItems, HttpStatus.CREATED);
+    }
+
     @PutMapping("/item/updateItem")
     public ResponseEntity<Item> updateItem(@RequestBody Item item) {
         Item updatedItem = itemService.updateItem(item);
@@ -92,6 +98,12 @@ public class ItemController {
     public ResponseEntity<Item> deleteItem(@PathVariable long itemId) {
         Item item = itemService.findById(itemId);
         itemService.deleteItem(item);
+        return new ResponseEntity<Item>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/delete/items")
+    public ResponseEntity<Item> deleteItems(@RequestBody List<Item> items) {
+        itemService.deleteItems(items);
         return new ResponseEntity<Item>(HttpStatus.NO_CONTENT);
     }
 }
