@@ -53,7 +53,7 @@ export default function AddNewItem({ handleAddItem, warehouse, products, invento
     }
 
     function handleCountChange(event) {
-        if (event.target.value >= 0 && ((event.target.value * (newProduct == undefined ? products[0].size : newProduct.size) + inventoryCountSum) < warehouse.capacity)) { setCount(event.target.value) }
+        if (event.target.value >= 0 && ((event.target.value * (newProduct == undefined ? products[0].size : newProduct.size) + inventoryCountSum) <= warehouse.capacity)) { setCount(event.target.value) }
         // if (event.target.value >= 0) { setCount(event.target.value) }
     }
 
