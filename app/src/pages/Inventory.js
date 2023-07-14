@@ -1,3 +1,7 @@
+/**
+ * Inventory - Inventory page for adding updating and deleting warehouses, and changing stock for items in warehouses
+ */
+
 import React, { useEffect, useState } from "react";
 import CustomModal from "../components/Modal";
 import Col from 'react-bootstrap/Col';
@@ -12,27 +16,10 @@ export default function Inventory() {
     const [warehouses, setWarehouses] = useState([]);
     const [products, setProducts] = useState([]);
     const [items, setItems] = useState([]);
-    const [itemCountByProductAndWarehouse, setItemCountByProductAndWarehouse] = useState([]);
-    // const [error, setError] = useState();
-
-    const [productsByWarehouse, setProductsByWarehouse] = useState([]);
-
     const [warehouseFormData, setWarehouseFormData] = useState({});
 
-    // const [validated, setValidated] = useState(false);
-
-    const [newItemFormData, setNewItemFormData] = useState(
-        {
-            product: {},
-            warehouse: {}
-        }
-    );
-
-    const [warehouseToAddTo, setWarehouseToAddTo] = useState()
-    const [newItemCount, setNewItemCount] = useState(0)
-
+    // POST new warehouse to DB, then rerender data with set warehouses
     const handleNewWarehouseSubmit = (event) => {
-
         fetch('warehouses/newWarehouse', {
             method: 'POST',
             headers: {
@@ -50,11 +37,9 @@ export default function Inventory() {
             .catch((err) => {
                 console.log(err.message);
             });
-
-        // setValidated(true);
-
     };
 
+    // Fetches warehouses after a warehouse is updated and sets warehouses so the data rerenders
     function handleUpdateWarehouse(updatedWarehouse) {
         fetch('warehouses')
             .then((res) => res.json())
@@ -66,6 +51,7 @@ export default function Inventory() {
             });
     };
 
+    // Fetches warehouses after a warehouse is deleted and sets warehouses so the data rerenders
     function handleDeleteWarehouse(data) {
         fetch('warehouses')
             .then((res) => res.json())
@@ -77,6 +63,7 @@ export default function Inventory() {
             });
     }
 
+    // Fetches items after an item(s) is added to a warehouse and sets warehouses so the data rerenders
     function handleAddItem(newItem) {
         fetch('items')
             .then((res) => res.json())
@@ -88,6 +75,8 @@ export default function Inventory() {
             });
     }
 
+    // Fetches items after updating stock and sets items so the data rerenders,
+    // then fetches warehouses and sets warehouses so the data rerenders
     function handleUpdateStock(data) {
         fetch('items')
             .then((res) => res.json())
@@ -97,13 +86,13 @@ export default function Inventory() {
             .catch((err) => {
                 console.log(err.message);
             }).then(() => fetch('warehouses')
-            .then((res) => res.json())
-            .then((data) => {
-                setWarehouses(data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            }))
+                .then((res) => res.json())
+                .then((data) => {
+                    setWarehouses(data);
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                }))
     }
 
     const handleStringInputChange = (event) => {
@@ -154,6 +143,7 @@ export default function Inventory() {
             });
     }, []);
 
+    // Returns the count of items for a specific product in a specific warehouse
     const getItemCountByProductAndWarehouse = (warehouseId, productId) => {
         let count = 0;
         for (let i = 0; i < items.length; i++) {
@@ -164,6 +154,7 @@ export default function Inventory() {
         return count;
     }
 
+    // Returns an array of all of the item objects in a given warehouse based on warehouse id
     const getItemsByWarehouseId = (warehouseId) => {
         let returnedItems = [];
         for (let i = 0; i < items.length; i++) {
@@ -174,6 +165,9 @@ export default function Inventory() {
         return returnedItems;
     }
 
+    // Returns an array of product objects that are contained in a warehouse. Filter() function is
+    // used to remove duplicate products (we only want to show 1 of each product in our page,
+    // and use the 'In Stock' column to show how many of each product we have in each warehouse )
     const getProductsByWarehouseId = (warehouseId) => {
         let products = [];
         for (let i = 0; i < items.length; i++) {
@@ -196,6 +190,7 @@ export default function Inventory() {
         return productsUnion;
     }
 
+    // Returns an array of items based on productId AND warehouseId
     const getItemsByWarehouseIdAndProductId = (warehouseId, productId) => {
         let filteredItems = [];
         for (let i = 0; i < items.length; i++) {
@@ -206,6 +201,7 @@ export default function Inventory() {
         return filteredItems;
     }
 
+    // Returns the sum of the size * stock for each item in a given warehouse. This will tell us how far away we are from capacity.
     const getInventoryCountSum = (warehouseId) => {
         let sum = 0;
         for (let i = 0; i < items.length; i++) {
@@ -217,12 +213,9 @@ export default function Inventory() {
     }
 
     return (
-
         <div>
-            {/** find a cool component to appear at the top of the page instead */}
             <h1>Inventory Management</h1>
             <div className="margin-top margin-bottom">
-
                 <CustomModal
                     buttonVariant="success"
                     buttonTitle="Add New Warehouse"
@@ -231,9 +224,7 @@ export default function Inventory() {
                     submitButtonVariant="primary"
                     cancelButtonVariant="secondary"
                     modalBody={
-                        <Form
-                        // noValidate validated={validated} onSubmit={handleNewWarehouseSubmit}
-                        >
+                        <Form>
                             <Row className="mb-3">
                                 <Form.Group as={Col} md="8" controlId="validationCustom01">
                                     <Form.Label>Warehouse Name</Form.Label>
@@ -299,6 +290,7 @@ export default function Inventory() {
                 </CustomModal>
             </div>
             {
+                // outer table (warehouses)
                 warehouses.map((warehouse, w) =>
                     <table key={w} className="table table-dark table-bordered">
                         <thead>
@@ -321,20 +313,19 @@ export default function Inventory() {
                                 <td>{warehouse.zip}</td>
                                 <td>{getInventoryCountSum(warehouse.warehouseId) + '/' + warehouse.capacity}</td>
                                 <td>
-                                    
+
                                     <UpdateWarehouse warehouse={warehouse} handleUpdateWarehouse={handleUpdateWarehouse}></UpdateWarehouse>
 
-                                    <div style={{marginBottom:"1rem"}}></div>
+                                    <div style={{ marginBottom: "1rem" }}></div>
 
                                     <AddNewItem
-                                        warehouse={warehouse} 
+                                        warehouse={warehouse}
                                         products={products}
                                         inventoryCountSum={getInventoryCountSum(warehouse.warehouseId)}
-                                        items={items}
                                         handleAddItem={handleAddItem}
                                     ></AddNewItem>
 
-                                    <div style={{marginBottom:"1rem"}}></div>
+                                    <div style={{ marginBottom: "1rem" }}></div>
 
                                     <DeleteWarehouse warehouse={warehouse} itemsToDelete={getItemsByWarehouseId(warehouse.warehouseId)} handleDeleteWarehouse={handleDeleteWarehouse}></DeleteWarehouse>
                                 </td>
@@ -353,6 +344,7 @@ export default function Inventory() {
                                         </thead>
                                         <tbody>
                                             {
+                                                // inner table (products)
                                                 getProductsByWarehouseId(warehouse.warehouseId).map((product, p) =>
                                                     <tr key={p}>
                                                         <td>{product.name}</td>
@@ -361,7 +353,7 @@ export default function Inventory() {
                                                         <td>{getItemCountByProductAndWarehouse(warehouse.warehouseId, product.productId)}</td>
                                                         <td>
                                                             <UpdateStockForm
-                                                                warehouse={warehouse} 
+                                                                warehouse={warehouse}
                                                                 product={product}
                                                                 existingCount={getItemCountByProductAndWarehouse(warehouse.warehouseId, product.productId)}
                                                                 inventoryCountSum={getInventoryCountSum(warehouse.warehouseId)}

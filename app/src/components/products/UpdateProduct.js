@@ -1,21 +1,31 @@
+/**
+ * UpdateProduct - Component used for updating products
+ *      Contains a CustomModal with a form as the body
+ */
+
 import React, { useState } from "react";
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import CustomModal from "../Modal";
 
+/**
+ * @param handleUpdateProduct - function to handle re-rendering of data after sending http request
+ * @param product - product to be updated
+ * @param productTypes - all product types (for displaying in the dropdown)
+ */
 export default function UpdateProduct({ handleUpdateProduct, product, productTypes }) {
 
-    const [productFormData, setProductFormData] = useState(product)
+    const [productFormData, setProductFormData] = useState(product) // form data gets initial state of the product to be updated
     const [productType, setProductType] = useState(product.productType)
 
+    // Update form data when the product name changes (the rest of the handle functions below do the same thing but for the other input fields)
     const handleProductNameChange = (event) => {
         setProductFormData({
             ...productFormData,
             "name": event.target.value,
         })
     }
-
 
     const handleProductTypeChange = (event) => {
         setProductType(event.target.value)
@@ -51,6 +61,7 @@ export default function UpdateProduct({ handleUpdateProduct, product, productTyp
     }
 
 
+    // Send PUT request with the form data in the body
     const handleUpdateProductSubmit = (event) => {
         fetch('products/product/updateProduct', {
             method: 'PUT',
@@ -81,7 +92,6 @@ export default function UpdateProduct({ handleUpdateProduct, product, productTyp
             productId={product.productId}
             modalBody={
                 <Form
-                    // noValidate validated={validated}
                     onSubmit={handleUpdateProductSubmit}
                 >
                     <Row className="mb-3">
@@ -95,9 +105,6 @@ export default function UpdateProduct({ handleUpdateProduct, product, productTyp
                                 className="form-control"
                                 onChange={handleProductNameChange}
                             />
-                            {/* <Form.Control.Feedback type="invalid">
-                                        Please enter a value that does not match an existing product name
-                                    </Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group as={Col} md="6" controlId="type">
                             <Form.Label>Type</Form.Label>
@@ -106,11 +113,6 @@ export default function UpdateProduct({ handleUpdateProduct, product, productTyp
                                     <option key={prodType.productTypeId} defaultValue={productType.value} value={JSON.stringify(prodType)}>{prodType.value}</option>
                                 ))}
                             </Form.Select>
-
-
-                            {/* <Form.Control.Feedback type="invalid">
-                                        
-                                    </Form.Control.Feedback> */}
                         </Form.Group>
                     </Row>
 
@@ -125,13 +127,8 @@ export default function UpdateProduct({ handleUpdateProduct, product, productTyp
                                 className="form-control"
                                 onChange={handleProductDescriptionChange}
                             />
-                            {/* <Form.Control.Feedback type="invalid">
-
-                                    </Form.Control.Feedback> */}
                         </Form.Group>
                     </Row>
-
-
                     <Row className="mb-3">
                         <Form.Group as={Col} md="6" controlId="price">
                             <Form.Label>Price</Form.Label>
@@ -143,9 +140,6 @@ export default function UpdateProduct({ handleUpdateProduct, product, productTyp
                                 className="form-control"
                                 onChange={handleProductPriceChange}
                             />
-                            {/* <Form.Control.Feedback type="invalid">
-                                    
-                                    </Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group as={Col} md="6" controlId="size">
                             <Form.Label>Size</Form.Label>
@@ -157,15 +151,11 @@ export default function UpdateProduct({ handleUpdateProduct, product, productTyp
                                 className="form-control"
                                 onChange={handleProductSizeChange}
                             />
-                            {/* <Form.Control.Feedback type="invalid">
-                                    
-                                    </Form.Control.Feedback> */}
                         </Form.Group>
                     </Row>
-
                 </Form>
             }
-            handleSubmit={handleUpdateProductSubmit} // this needs to be if(validated)
+            handleSubmit={handleUpdateProductSubmit}
         >
         </CustomModal>
     );

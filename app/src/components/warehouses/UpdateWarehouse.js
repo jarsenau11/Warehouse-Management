@@ -1,9 +1,18 @@
+/**
+ * UpdateWarehouse - component used for updating the a warehouse
+ *      Contains a CustomModal component with a form as the modal body
+ */
+
 import React, { useState } from "react";
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import CustomModal from "../Modal";
 
+/**
+ * @param handleUpdateWarehouse - function to handle re-rendering of data after sending http request
+ * @param warehouse - the warehouse to be updated
+ */
 export default function UpdateWarehouse({ handleUpdateWarehouse, warehouse }) {
 
     const [warehouseFormData, setWarehouseFormData] = useState(warehouse)
@@ -50,6 +59,7 @@ export default function UpdateWarehouse({ handleUpdateWarehouse, warehouse }) {
         })
     }
 
+    // PUT request to update the warehouse
     const handleUpdateWarehouseSubmit = (event) => {
         fetch('warehouses/warehouse/updateWarehouse', {
             method: 'PUT',
@@ -77,8 +87,7 @@ export default function UpdateWarehouse({ handleUpdateWarehouse, warehouse }) {
             submitButtonVariant="primary"
             cancelButtonVariant="secondary"
             modalBody={
-                <Form
-                    // noValidate validated={validated} 
+                <Form 
                     onSubmit={handleUpdateWarehouseSubmit}
                 >
                     <Row className="mb-3">
@@ -91,9 +100,6 @@ export default function UpdateWarehouse({ handleUpdateWarehouse, warehouse }) {
                                 value={warehouseFormData.name}
                                 onChange={handleWarehouseNameChange}
                             />
-                            {/* <Form.Control.Feedback type="invalid">
-                                                            There is already a warehouse with this name
-                                                        </Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group as={Col} md="4" controlId="validationCustom02">
                             <Form.Label>Capacity</Form.Label>
@@ -104,41 +110,26 @@ export default function UpdateWarehouse({ handleUpdateWarehouse, warehouse }) {
                                 value={warehouseFormData.capacity}
                                 onChange={handleWarehouseCapacityChange}
                             />
-                            {/* <Form.Control.Feedback type="invalid">
-                                Please provide a valid capacity.
-                            </Form.Control.Feedback> */}
                         </Form.Group>
                     </Row>
                     <Row className="mb-3">
                         <Form.Group as={Col} md="7" controlId="validationCustom03">
                             <Form.Label>Street</Form.Label>
                             <Form.Control type="text" name="street" value={warehouseFormData.street} required onChange={handleWarehouseStreetChange} />
-                            {/* <Form.Control.Feedback type="invalid">
-                                Please provide a valid street.
-                            </Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group as={Col} md="5" controlId="validationCustom04">
                             <Form.Label>City</Form.Label>
                             <Form.Control type="text" name="city" value={warehouseFormData.city} required onChange={handleWarehouseCityChange} />
-                            {/* <Form.Control.Feedback type="invalid">
-                                Please provide a valid city.
-                            </Form.Control.Feedback> */}
                         </Form.Group>
                     </Row>
                     <Row>
                         <Form.Group as={Col} md="6" controlId="validationCustom05">
                             <Form.Label>State</Form.Label>
                             <Form.Control type="text" name="state" value={warehouseFormData.state} required onChange={handleWarehouseStateChange} />
-                            {/* <Form.Control.Feedback type="invalid">
-                                Please provide a valid state.
-                            </Form.Control.Feedback> */}
                         </Form.Group>
                         <Form.Group as={Col} md="6" controlId="validationCustom06">
                             <Form.Label>Zip</Form.Label>
                             <Form.Control type="number" name="zip" value={warehouseFormData.zip} required onChange={handleWarehouseZipChange} />
-                            {/* <Form.Control.Feedback type="invalid">
-                                Please provide a valid zip.
-                            </Form.Control.Feedback> */}
                         </Form.Group>
                     </Row>
                 </Form>

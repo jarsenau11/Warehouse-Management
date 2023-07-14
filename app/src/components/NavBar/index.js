@@ -1,3 +1,7 @@
+/**
+ * NavBar component built using react-router-dom
+ */
+
 import { Link, useMatch, useResolvedPath } from "react-router-dom"
 
 export default function NavBar() {
@@ -13,6 +17,7 @@ export default function NavBar() {
     )
 }
 
+// Function that handles changing the styling of the nav bar items depending on whether they are active (selected) or not
 function CustomLink({ to, children }) {
     const resolvedPath = useResolvedPath(to);
     const isActive = useMatch({ path: resolvedPath.pathname, end: true});

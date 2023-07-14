@@ -1,3 +1,9 @@
+/*
+ * Warehouse Model
+ *      - entity attributes: warehouseId (long), name (string), capacity (int), street (string), city (string), state (string), zip (int) items (set of Item objects)
+ *      - one to many relationship with Item entity
+ */
+
 package com.project1.warehouse_management.models;
 
 import java.util.Set;

@@ -1,3 +1,7 @@
+/**
+ * Products - Products page for adding updating and deleting products
+ */
+
 import React, { useEffect, useState } from "react";
 import CustomModal from "../components/Modal";
 import Col from 'react-bootstrap/Col';
@@ -8,14 +12,10 @@ import UpdateProduct from "../components/products/UpdateProduct";
 
 export default function Products() {
     const [products, setProducts] = useState([]);
-    const [warehouses, setWarehouses] = useState([]);
     const [items, setItems] = useState([]);
     const [productTypes, setProductTypes] = useState([]);
-    // const [error, setError] = useState();
-
     const [productSize, setProductSize] = useState(1);
     const [productPrice, setProductPrice] = useState(1.00);
-
     const [productFormData, setproductFormData] = useState(
         {
             name: '',
@@ -26,10 +26,8 @@ export default function Products() {
         }
     );
 
-    // const [validated, setValidated] = useState(false);
-
+    // Sends POST request with the new product in the body, then fetches products and setsProducts() so the data rerenders
     const handleNewProductSubmit = (event) => {
-
         fetch('products/newProduct', {
             method: 'POST',
             headers: {
@@ -47,12 +45,9 @@ export default function Products() {
             .catch((err) => {
                 console.log(err.message);
             });
-
-        // setValidated(true);
-
     };
 
-
+    // Fetches products after a product is updated and setsProducts() so the data rerenders
     function handleUpdateProduct(updatedProduct) {
         fetch('products')
             .then((res) => res.json())
@@ -64,6 +59,7 @@ export default function Products() {
             })
     };
 
+    // Fetches products after a product is deleted and setsProducts() so the data rerenders
     function handleDeleteProduct(data) {
         fetch('products')
             .then((res) => res.json())
@@ -75,6 +71,7 @@ export default function Products() {
             })
     };
 
+    // Function that returns an array of all Item objects associated with a given product based on productId
     const getItemsByProductId = (productId) => {
         let returnedItems = [];
         for (let i = 0; i < items.length; i++) {
@@ -83,13 +80,6 @@ export default function Products() {
             }
         }
         return returnedItems;
-    }
-
-    const handleUpdateSetId = (productId) => {
-        setproductFormData({
-            ...productFormData,
-            "productId": productId
-        })
     }
 
     const handleProductTypeChange = (event) => {
@@ -144,17 +134,6 @@ export default function Products() {
     }, []);
 
     useEffect(() => {
-        fetch('warehouses')
-            .then((res) => res.json())
-            .then((data) => {
-                setWarehouses(data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-    }, []);
-
-    useEffect(() => {
         fetch('items')
             .then((res) => res.json())
             .then((data) => {
@@ -179,7 +158,6 @@ export default function Products() {
 
     return (
         <div>
-            {/** find a cool component to appear at the top of the page instead */}
             <h1>Product Management</h1>
             <div className="margin-top margin-bottom">
                 <CustomModal
@@ -191,7 +169,6 @@ export default function Products() {
                     cancelButtonVariant="secondary"
                     modalBody={
                         <Form
-                            //  noValidate validated={validated}
                             onSubmit={handleNewProductSubmit}
                         >
                             <Row className="mb-3">
@@ -204,9 +181,6 @@ export default function Products() {
                                         className="form-control"
                                         onChange={handleNameChange}
                                     />
-                                    {/* <Form.Control.Feedback type="invalid">
-                                        Please enter a value that does not match an existing product name
-                                    </Form.Control.Feedback> */}
                                 </Form.Group>
                                 <Form.Group as={Col} md="6" controlId="type">
                                     <Form.Label>Type</Form.Label>
@@ -216,14 +190,8 @@ export default function Products() {
                                             <option key={productType.productTypeId} value={JSON.stringify(productType)}>{productType.value}</option>
                                         ))}
                                     </Form.Select>
-
-
-                                    {/* <Form.Control.Feedback type="invalid">
-                                        
-                                    </Form.Control.Feedback> */}
                                 </Form.Group>
                             </Row>
-
                             <Row className="mb-3">
                                 <Form.Group as={Col} md="12" controlId="description">
                                     <Form.Label>Description</Form.Label>
@@ -234,13 +202,8 @@ export default function Products() {
                                         className="form-control"
                                         onChange={handleDescriptionChange}
                                     />
-                                    {/* <Form.Control.Feedback type="invalid">
-
-                                    </Form.Control.Feedback> */}
                                 </Form.Group>
                             </Row>
-
-
                             <Row className="mb-3">
                                 <Form.Group as={Col} md="6" controlId="price">
                                     <Form.Label>Price</Form.Label>
@@ -252,9 +215,6 @@ export default function Products() {
                                         className="form-control"
                                         onChange={handlePriceChange}
                                     />
-                                    {/* <Form.Control.Feedback type="invalid">
-                                    
-                                    </Form.Control.Feedback> */}
                                 </Form.Group>
                                 <Form.Group as={Col} md="6" controlId="size">
                                     <Form.Label>Size</Form.Label>
@@ -266,15 +226,12 @@ export default function Products() {
                                         className="form-control"
                                         onChange={handleSizeChange}
                                     />
-                                    {/* <Form.Control.Feedback type="invalid">
-                                    
-                                    </Form.Control.Feedback> */}
                                 </Form.Group>
                             </Row>
 
                         </Form>
                     }
-                    handleSubmit={handleNewProductSubmit} // this needs to be if(validated)
+                    handleSubmit={handleNewProductSubmit}
                 >
                 </CustomModal>
             </div>

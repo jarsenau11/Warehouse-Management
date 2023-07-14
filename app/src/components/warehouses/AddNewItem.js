@@ -1,15 +1,25 @@
+/**
+ * AddNewItem - component used for adding new items to the database
+ *      Contains a CustomModal component with a form as the modal body
+ */
+
 import React, { useState } from "react";
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import CustomModal from "../Modal";
 
-export default function AddNewItem({ handleAddItem, warehouse, products, inventoryCountSum, items }) {
-    // const [warehouse, setWarehouse] = useState()
+/**
+ * @param handleAddItem - function to handle re-rendering of data after sending http request
+ * @param warehouse - the warehouse to associate with the item
+ * @param products - all products (for display in the dropdown)
+ * @param inventoryCountSum - x value in x/(warehouse capacity) --- this will be used to calculate if the add item operation will cause the capacity to be exceeded
+ */
+export default function AddNewItem({ handleAddItem, warehouse, products, inventoryCountSum }) {
     const [count, setCount] = useState(0)
     const [newProduct, setNewProduct] = useState(products[0])
 
-
+    // On submit via the modal, build new array of items to add, then check if capacity would be exceeded by adding those items (if yes, don't add, otherwise call addItems())
     function handleAddItemSubmit(event) {
         if(newProduct == undefined || newProduct == null) {
             setNewProduct(products[0])
@@ -34,6 +44,7 @@ export default function AddNewItem({ handleAddItem, warehouse, products, invento
         }
     }
 
+    // Takes in array of new items and sends the array as the body of the POST request
     function addItems(itemBaseArr, event) {
             fetch('items/newItems', {
                 method: 'POST',
@@ -75,11 +86,9 @@ export default function AddNewItem({ handleAddItem, warehouse, products, invento
             modalHeading="Add New Product"
             submitButtonVariant="primary"
             cancelButtonVariant="secondary"
-            // handleInitialButtonClick={setWarehouseToAddTo(warehouse)}
             handleInitialButtonClick={handleModalClick}
             modalBody={
                 <Form
-                // noValidate validated={validated} onSubmit={handleAddItemSubmit}
                 >
                     <Row className="mb-3">
                         <Form.Group as={Col} md="8" controlId="validationCustom01">

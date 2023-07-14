@@ -1,3 +1,18 @@
+/**
+ * Custom modal component built using the Modal component from react-bootstrap
+ * 
+ *    props:
+ *      - handleInitialButtonClick - takes a function that can perform some action when clicking the button that opens the modal
+ *      - buttonStyle - styles the button that opens the modal
+ *      - buttonVariant - sets the color for the button that opens the modal
+ *      - buttonTitle - sets the title for the button that opens the modal
+ *      - modalHeading - sets the modal heading
+ *      - modalBody - sets the modal body
+ *      - cancelButtonVariant - sets the color of the cancel button in the modal
+ *      - submitButtonVariant - sets the color of the submit button in the modal
+ *      - handleSubmit - takes a function that executes on submit
+ */
+
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';

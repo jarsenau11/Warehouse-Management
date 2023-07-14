@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+/**
+ * DeleteProductType - component used for deleting product types
+ *      Contains a CustomModal component with a form as the modal body
+ */
+
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import CustomModal from "../Modal";
 
+/**
+ * @param handleDeleteProductType - function to handle re-rendering of data after sending http request
+ * @param productType - the product type that will be deleted
+ * @param productsToDelete (optional) - products associated with the product type which will also be deleted
+ * @param itemsToDelete (optional) - items associated with the product which will also be deleted
+ */
 export default function DeleteProductType({ handleDeleteProductType, productType, productsToDelete, itemsToDelete }) {
 
+    // Determines whether there are any items and/or products to delete before the product type, and calls the appropriate function
     function handleDeleteProductTypeSubmit(event) {
         if ((productsToDelete == null || productsToDelete == undefined || productsToDelete.length == 0) && (itemsToDelete == null || itemsToDelete == undefined || itemsToDelete.length == 0)) {
             deleteProductType(event)
         }
-        else if((itemsToDelete == null || itemsToDelete == undefined || itemsToDelete.length == 0)) {
+        else if ((itemsToDelete == null || itemsToDelete == undefined || itemsToDelete.length == 0)) {
             deleteProductsAndProductType(event)
         }
         else {
@@ -18,6 +29,7 @@ export default function DeleteProductType({ handleDeleteProductType, productType
         }
     }
 
+    // If there are items and products associated with the product type, this function will be called (and will delete items -> products -> product type)
     function deleteItemsAndProductsAndProductType(event) {
         fetch('items/delete/items', {
             method: 'DELETE',
@@ -52,6 +64,7 @@ export default function DeleteProductType({ handleDeleteProductType, productType
         })
     }
 
+    // If there are no items but there are products, this function will be called (and will delete products -> product type)
     function deleteProductsAndProductType(event) {
         fetch('products/delete/products', {
             method: 'DELETE',
@@ -75,6 +88,7 @@ export default function DeleteProductType({ handleDeleteProductType, productType
         })
     }
 
+    // If there are no items or products associated with the product type, this function will be called (and the product type will be deleted)
     function deleteProductType(event) {
         fetch('productTypes/productType/delete/' + productType.productTypeId, {
             method: 'DELETE',
