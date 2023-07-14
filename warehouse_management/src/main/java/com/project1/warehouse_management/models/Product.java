@@ -28,7 +28,6 @@ public class Product {
     @Column(name = "name")
     private String name;
 
-    // @Column(name = "product_type_id")
     @ManyToOne
     @JoinColumn(name = "product_type_id")
     private ProductType productType;

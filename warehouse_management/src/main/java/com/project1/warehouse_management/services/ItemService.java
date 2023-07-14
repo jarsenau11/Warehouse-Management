@@ -28,6 +28,15 @@ public class ItemService {
         return null;
     }
 
+    public List<Item> findItemsByProductId(long productId) {
+        Optional<List<Item>> items = itemRepository.findItemsByProductId(productId);
+
+        if(items.isPresent()) {
+            return items.get();
+        }
+        return null;
+    }
+
     public List<Item> findItemsByProductTypeId(long productTypeId) {
         Optional<List<Item>> items = itemRepository.findItemsByProductTypeId(productTypeId);
 
@@ -49,11 +58,19 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
+    public List<Item> createItems(List<Item> items) {
+        return itemRepository.saveAll(items);
+    }
+
     public Item updateItem(Item item) {
         return itemRepository.save(item);
     }
 
     public void deleteItem(Item item) {
         itemRepository.delete(item);
+    }
+
+    public void deleteItems(List<Item> items) {
+        itemRepository.deleteAll(items);
     }
 }
