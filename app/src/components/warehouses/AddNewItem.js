@@ -53,22 +53,29 @@ export default function AddNewItem({ handleAddItem, warehouse, products, invento
     }
 
     function handleCountChange(event) {
-        if (event.target.value >= 0) { setCount(event.target.value) }
+        if (event.target.value >= 0 && ((event.target.value * (newProduct == undefined ? products[0].size : newProduct.size) + inventoryCountSum) < warehouse.capacity)) { setCount(event.target.value) }
+        // if (event.target.value >= 0) { setCount(event.target.value) }
     }
 
     function handleProductChange(event) {
+        setCount(0)
         setNewProduct(event.target.value)
+    }
+
+    function handleModalClick() {
+        setCount(0)
     }
 
     return (
         <CustomModal
-            buttonVariant="success"
+            buttonVariant="primary"
             buttonTitle="Add New Product"
             action="addNewProduct"
             modalHeading="Add New Product"
             submitButtonVariant="primary"
             cancelButtonVariant="secondary"
             // handleInitialButtonClick={setWarehouseToAddTo(warehouse)}
+            handleInitialButtonClick={handleModalClick}
             modalBody={
                 <Form
                 // noValidate validated={validated} onSubmit={handleAddItemSubmit}

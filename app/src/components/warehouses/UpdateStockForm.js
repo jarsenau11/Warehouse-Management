@@ -101,7 +101,7 @@ export default function UpdateStockForm({ handleUpdateStock, warehouse, product,
     }
 
     function handleCountChange(event) {
-        if (event.target.value >= 0) { setNewCount(event.target.value) }
+        if (event.target.value >= 0 && warehouse.capacity >= (event.target.value * product.size + inventoryCountSum)) { setNewCount(event.target.value) }
     }
 
     return (
@@ -114,7 +114,6 @@ export default function UpdateStockForm({ handleUpdateStock, warehouse, product,
             cancelButtonVariant="secondary"
             modalBody={
                 <Form
-                // noValidate validated={validated} onSubmit={handleAddItemSubmit}
                 >
                     <Row className="mb-3">
                         <Form.Group as={Col} md="8">

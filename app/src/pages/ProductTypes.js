@@ -3,6 +3,7 @@ import CustomModal from "../components/Modal";
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+import DeleteProductType from "../components/productTypes/DeleteProductType";
 
 export default function Products() {
     const [productTypes, setProductTypes] = useState([]);
@@ -42,8 +43,8 @@ export default function Products() {
 
     const handleUpdateProductTypeSubmit = (event) => {
         // if(updateProductTypeFormData.value exists (loop through productTypes)) { error } else {
-
-
+        if(updateProductTypeFormData == null || updateProductTypeFormData == undefined || updateProductTypeFormData.length == 0) {} 
+        else {
         fetch('productTypes/productType/updateProductType', {
             method: 'PUT',
             headers: {
@@ -52,44 +53,56 @@ export default function Products() {
             body: JSON.stringify(updateProductTypeFormData)
         })
             .then((res) => res.json())
-            .then((data) => {
-                for (let i = 0; i < productTypes.length; i++) {
-                    if (productTypes[i].productTypeId == data.productTypeId) {
-                        productTypes[i].value = data.value
-                        break
-                    }
-                }
+            .then(() => {
+                fetch('productTypes')
+                .then((res) => res.json())
+                .then((data) => {
+                    setProductTypes(data);
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                })
             })
             .catch((err) => {
                 console.log(err.message);
             });
-
-        // setValidated(true);
-
-        console.log(updateProductTypeFormData)
+        }
 
     };
 
     const handleDeleteProductTypeSubmit = (event) => {
-
-        const data = new FormData(event.target)
-        // console.log(event.target.id)
-        // fetch('productTypes/productType/updateProductType/delete/' + deleteProductType.productTypeId, {
-        //     method: 'DELETE',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify() // add object here
-        // })
-        // .then((res) => res.json())
-        // .then((data) => setProductTypes((current) => current.filter((productType => productType.productTypeId != data.productTypeId))))
-        // .catch((err) => {
-        //     console.log(err.message);
-        // });
-
-        // setValidated(true);
-
+        fetch('productTypes')
+            .then((res) => res.json())
+            .then((data) => {
+                setProductTypes(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
     };
+
+    const getProductsByProductTypeId = (productTypeId) => {
+        let returnedProducts = [];
+        for (let i = 0; i < products.length; i++) {
+            if (products[i].productType.productTypeId === productTypeId) {
+                returnedProducts.push(products[i])
+            }
+        }
+        return returnedProducts;
+    }
+
+    const getItemsByProductTypeId = (productTypeId) => {
+        let products = getProductsByProductTypeId(productTypeId)
+        let returnedItems = [];
+        for (let i = 0; i < items.length; i++) {
+            for(let j = 0; j < products.length; j++) {
+                if (items[i].product.productId === products[j].productId) {
+                    returnedItems.push(items[i])
+                }
+            }
+        }
+        return returnedItems;
+    }
 
     const handleNewProductTypeInputChange = (event) => {
         setNewProductTypeFormData({
@@ -202,6 +215,7 @@ export default function Products() {
                                 <td className="column-width-25">
                                     <CustomModal
                                         buttonTitle="Update"
+                                        buttonStyle={{marginRight:"20px"}}
                                         action="updateProductType"
                                         modalHeading="Update Product Type"
                                         submitButtonVariant="primary"
@@ -232,35 +246,8 @@ export default function Products() {
                                         handleSubmit={handleUpdateProductTypeSubmit} // this needs to be if(validated)?
                                     >
                                     </CustomModal>
-                                    <CustomModal
-                                        buttonTitle="Delete"
-                                        action="deleteProductType"
-                                        modalHeading="Delete Product Type"
-                                        submitButtonVariant="danger"
-                                        cancelButtonVariant="secondary"
-                                        buttonVariant="danger"
-                                        modalBody={
-                                            <Form
-                                                // noValidate validated={validated} 
-                                                onSubmit={handleDeleteProductTypeSubmit}
-                                            >
-                                                <Row className="mb-3">
-                                                    <Form.Group as={Col} md="12">
-                                                        <Form.Label>Are you sure you want to delete this product type?</Form.Label>
-                                                        <Form.Control
-                                                            disabled
-                                                            value={productType.value}
-                                                            // id={productType.productTypeId}
-                                                            type="text"
-                                                            className="form-control"
-                                                        />
-                                                    </Form.Group>
-                                                </Row>
-                                            </Form>
-                                        }
-                                        handleSubmit={handleDeleteProductTypeSubmit}
-                                    >
-                                    </CustomModal>
+                                    
+                                    <DeleteProductType productType={productType} productsToDelete={getProductsByProductTypeId(productType.productTypeId)} itemsToDelete={getItemsByProductTypeId(productType.productTypeId)} handleDeleteProductType={handleDeleteProductTypeSubmit}></DeleteProductType>
                                 </td>
                             </tr>
                         )}

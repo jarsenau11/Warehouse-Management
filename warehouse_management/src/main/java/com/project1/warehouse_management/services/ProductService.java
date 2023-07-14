@@ -39,6 +39,10 @@ public class ProductService {
         productRepository.delete(product);
     }
 
+    public void deleteProducts(List<Product> products) {
+        productRepository.deleteAll(products);
+    }
+
     // public void deleteProductByProductTypeId(long productTypeId) {
     //     productRepository.deleteByProductTypeId(productTypeId);
     // }

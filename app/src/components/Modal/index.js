@@ -8,11 +8,11 @@ function CustomModal(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const test = props.handleInitialButtonClick;
+  const initialButtonClickAction = props.handleInitialButtonClick;
 
   return (
     <>
-      <Button variant={props.buttonVariant} onClick={function(){handleShow(); if(test == null){} else{test()}}}>
+      <Button style={props?.buttonStyle} variant={props.buttonVariant} onClick={function(){handleShow(); if(initialButtonClickAction == null){} else{initialButtonClickAction()}}}>
         {props.buttonTitle}
       </Button>
 

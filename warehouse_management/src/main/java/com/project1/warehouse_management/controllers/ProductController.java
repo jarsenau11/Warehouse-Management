@@ -61,4 +61,10 @@ public class ProductController {
         productService.deleteProduct(product);
         return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/delete/products")
+    public ResponseEntity<Product> deleteProducts(@RequestBody List<Product> products) {
+        productService.deleteProducts(products);
+        return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
+    }
 }

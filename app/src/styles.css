@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }
 
-.app-container {
-    background-color:#adadad;
-}
-
 .inner-container {
     margin: 2rem;
     margin-right: 16rem;
