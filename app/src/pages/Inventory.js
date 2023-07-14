@@ -66,6 +66,17 @@ export default function Inventory() {
             });
     };
 
+    function handleDeleteWarehouse(data) {
+        fetch('warehouses')
+            .then((res) => res.json())
+            .then((data) => {
+                setWarehouses(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
     function handleAddItem(newItem) {
         fetch('items')
             .then((res) => res.json())
@@ -325,7 +336,7 @@ export default function Inventory() {
 
                                     <div style={{marginBottom:"1rem"}}></div>
 
-                                    <DeleteWarehouse warehouse={warehouse} itemsToDelete={getItemsByWarehouseId(warehouse.warehouseId)}></DeleteWarehouse>
+                                    <DeleteWarehouse warehouse={warehouse} itemsToDelete={getItemsByWarehouseId(warehouse.warehouseId)} handleDeleteWarehouse={handleDeleteWarehouse}></DeleteWarehouse>
                                 </td>
                             </tr>
                             <tr>

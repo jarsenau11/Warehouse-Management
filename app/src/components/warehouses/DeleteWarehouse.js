@@ -28,6 +28,9 @@ export default function DeleteWarehouse({ handleDeleteWarehouse, warehouse, item
                 headers: {
                     'Content-Type': 'application/json',
                 },
+            }).then(() => {
+                handleDeleteWarehouse(event)
+                event.target.reset()
             })
                 .catch((err) => {
                     console.log(err.message);
@@ -41,6 +44,9 @@ export default function DeleteWarehouse({ handleDeleteWarehouse, warehouse, item
             headers: {
                 'Content-Type': 'application/json',
             },
+        }).then(() => {
+            handleDeleteWarehouse(event)
+            event.target.reset()
         })
             .catch((err) => {
                 console.log(err.message);
