@@ -1,3 +1,6 @@
+/**
+ * ProductTypes - Product Types page for adding updating and deleting product types
+ */
 import React, { useEffect, useState } from "react";
 import CustomModal from "../components/Modal";
 import Col from 'react-bootstrap/Col';
@@ -8,17 +11,12 @@ import DeleteProductType from "../components/productTypes/DeleteProductType";
 export default function Products() {
     const [productTypes, setProductTypes] = useState([]);
     const [products, setProducts] = useState([]);
-    const [warehouses, setWarehouses] = useState([]);
     const [items, setItems] = useState([]);
-    // const [error, setError] = useState();
     const [newProductTypeFormData, setNewProductTypeFormData] = useState();
     const [updateProductTypeFormData, setUpdateProductTypeFormData] = useState({});
-    const [deleteProductType, setDeleteProductType] = useState();
 
-    // const [validated, setValidated] = useState(false);
-
+    // Adds new product type to the DB and setProductTypes to rerender the data
     const handleNewProductTypeSubmit = (event) => {
-
         fetch('productTypes/newProductType', {
             method: 'POST',
             headers: {
@@ -36,40 +34,38 @@ export default function Products() {
             .catch((err) => {
                 console.log(err.message);
             });
-
-        // setValidated(true);
-
     };
 
+    // Updates product type (if it has changed) and then fetches productTypes so that we can use setProductTypes() to rerender the data
     const handleUpdateProductTypeSubmit = (event) => {
-        // if(updateProductTypeFormData.value exists (loop through productTypes)) { error } else {
-        if(updateProductTypeFormData == null || updateProductTypeFormData == undefined || updateProductTypeFormData.length == 0) {} 
+        if (updateProductTypeFormData == null || updateProductTypeFormData == undefined || updateProductTypeFormData.length == 0) { }
         else {
-        fetch('productTypes/productType/updateProductType', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(updateProductTypeFormData)
-        })
-            .then((res) => res.json())
-            .then(() => {
-                fetch('productTypes')
+            fetch('productTypes/productType/updateProductType', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateProductTypeFormData)
+            })
                 .then((res) => res.json())
-                .then((data) => {
-                    setProductTypes(data);
+                .then(() => {
+                    fetch('productTypes')
+                        .then((res) => res.json())
+                        .then((data) => {
+                            setProductTypes(data);
+                        })
+                        .catch((err) => {
+                            console.log(err.message);
+                        })
                 })
                 .catch((err) => {
                     console.log(err.message);
-                })
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
+                });
         }
 
     };
 
+    // Fetches product types after deletion and setsProductTypes so the data rerenders
     const handleDeleteProductTypeSubmit = (event) => {
         fetch('productTypes')
             .then((res) => res.json())
@@ -81,6 +77,7 @@ export default function Products() {
             });
     };
 
+    // Function that returns an array of all products with a given product type based on product type id
     const getProductsByProductTypeId = (productTypeId) => {
         let returnedProducts = [];
         for (let i = 0; i < products.length; i++) {
@@ -91,11 +88,12 @@ export default function Products() {
         return returnedProducts;
     }
 
+    // Function that returns an array of all items associated with a given product type based on product type id
     const getItemsByProductTypeId = (productTypeId) => {
         let products = getProductsByProductTypeId(productTypeId)
         let returnedItems = [];
         for (let i = 0; i < items.length; i++) {
-            for(let j = 0; j < products.length; j++) {
+            for (let j = 0; j < products.length; j++) {
                 if (items[i].product.productId === products[j].productId) {
                     returnedItems.push(items[i])
                 }
@@ -140,17 +138,6 @@ export default function Products() {
     }, []);
 
     useEffect(() => {
-        fetch('warehouses')
-            .then((res) => res.json())
-            .then((data) => {
-                setWarehouses(data);
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-    }, []);
-
-    useEffect(() => {
         fetch('items')
             .then((res) => res.json())
             .then((data) => {
@@ -163,9 +150,7 @@ export default function Products() {
 
     return (
         <div className="small-container">
-            {/** find a cool component to appear at the top of the page instead */}
             <h1 className="text-center">Product Type Management</h1>
-
             <div className="margin-top margin-bottom">
                 <CustomModal
                     buttonVariant="success"
@@ -176,7 +161,6 @@ export default function Products() {
                     cancelButtonVariant="secondary"
                     modalBody={
                         <Form
-                            // noValidate validated={validated}
                             onSubmit={handleNewProductTypeSubmit}
                         >
                             <Row className="mb-3">
@@ -188,14 +172,11 @@ export default function Products() {
                                         className="form-control"
                                         onChange={handleNewProductTypeInputChange}
                                     />
-                                    {/* <Form.Control.Feedback type="invalid">
-                                        Please enter a value that does not match an existing product type
-                                    </Form.Control.Feedback> */}
                                 </Form.Group>
                             </Row>
                         </Form>
                     }
-                    handleSubmit={handleNewProductTypeSubmit} // this needs to be if(validated)?
+                    handleSubmit={handleNewProductTypeSubmit}
                 >
                 </CustomModal>
             </div>
@@ -215,14 +196,13 @@ export default function Products() {
                                 <td className="column-width-25">
                                     <CustomModal
                                         buttonTitle="Update"
-                                        buttonStyle={{marginRight:"20px"}}
+                                        buttonStyle={{ marginRight: "20px" }}
                                         action="updateProductType"
                                         modalHeading="Update Product Type"
                                         submitButtonVariant="primary"
                                         cancelButtonVariant="secondary"
                                         modalBody={
                                             <Form
-                                                // noValidate validated={validated}
                                                 onSubmit={handleUpdateProductTypeSubmit}
                                             >
                                                 <Row className="mb-3">
@@ -236,18 +216,20 @@ export default function Products() {
                                                             className="form-control"
                                                             onChange={handleUpdateProductTypeInputChange}
                                                         />
-                                                        {/* <Form.Control.Feedback type="invalid">
-                                        Please enter a value that does not match an existing product type
-                                    </Form.Control.Feedback> */}
                                                     </Form.Group>
                                                 </Row>
                                             </Form>
                                         }
-                                        handleSubmit={handleUpdateProductTypeSubmit} // this needs to be if(validated)?
+                                        handleSubmit={handleUpdateProductTypeSubmit}
                                     >
                                     </CustomModal>
-                                    
-                                    <DeleteProductType productType={productType} productsToDelete={getProductsByProductTypeId(productType.productTypeId)} itemsToDelete={getItemsByProductTypeId(productType.productTypeId)} handleDeleteProductType={handleDeleteProductTypeSubmit}></DeleteProductType>
+
+                                    <DeleteProductType
+                                        productType={productType}
+                                        productsToDelete={getProductsByProductTypeId(productType.productTypeId)}
+                                        itemsToDelete={getItemsByProductTypeId(productType.productTypeId)}
+                                        handleDeleteProductType={handleDeleteProductTypeSubmit}>
+                                    </DeleteProductType>
                                 </td>
                             </tr>
                         )}

@@ -1,3 +1,9 @@
+/*
+ * Item Model
+ *      - entity attributes: warehouseId (long), warehouse (Warehouse object), product (Product object)
+ *      - many to one relationship with product; many to one relationship with warehouse
+ */
+
 package com.project1.warehouse_management.models;
 
 import javax.persistence.Column;

@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+/**
+ * DeleteWarehouse - component used for deleting warehouses
+ *      Contains a CustomModal component with a form as the modal body
+ */
+
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import CustomModal from "../Modal";
 
+/**
+ * @param handleDeleteWarehouse - function to handle re-rendering of data after sending http request
+ * @param warehouse - the warehouse to delete
+ * @param itemsToDelete (optional) - items associated with the warehouse (which will be deleted)
+ */
 export default function DeleteWarehouse({ handleDeleteWarehouse, warehouse, itemsToDelete }) {
 
+    // On submit, route to appropriate function depending on whether or not there are items in the warehouse
     function handleDeleteWarehouseSubmit(event) {
         if (itemsToDelete == null || itemsToDelete == undefined || itemsToDelete.length == 0) {
             deleteWarehouse(event)
@@ -15,6 +25,7 @@ export default function DeleteWarehouse({ handleDeleteWarehouse, warehouse, item
         }
     }
 
+    // Delete items, then delete warehouse
     function deleteItemsAndWarehouse(event) {
         fetch('items/delete/items', {
             method: 'DELETE',
@@ -38,6 +49,7 @@ export default function DeleteWarehouse({ handleDeleteWarehouse, warehouse, item
         })
     }
 
+    // Delete warehouse
     function deleteWarehouse(event) {
         fetch('warehouses/warehouse/delete/' + warehouse.warehouseId, {
             method: 'DELETE',

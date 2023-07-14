@@ -1,3 +1,7 @@
+/*
+ * ProductTypeController - handles incoming HTTP requests for our product types
+ */
+
 package com.project1.warehouse_management.controllers;
 
 import java.util.List;
@@ -36,18 +40,21 @@ public class ProductTypeController {
         return new ResponseEntity<List<ProductType>>(productTypes, HttpStatus.OK);
     }
 
+    // GET product type by id
     @GetMapping("productType/{productTypeId}")
     public ResponseEntity<ProductType> findProductTypeById(@PathVariable long productTypeId) {
         ProductType productType = productTypeService.findProductTypeById(productTypeId);
         return new ResponseEntity<ProductType>(productType, HttpStatus.OK);
     }
     
+    // POST new product type
     @PostMapping("/newProductType")
     public ResponseEntity<ProductType> createProductType(@RequestBody ProductType productType) {
         ProductType newProductType = productTypeService.createProductType(productType);
         return new ResponseEntity<ProductType>(newProductType, HttpStatus.CREATED);
     }
 
+    // PUT (update) a product type
     @PutMapping("/productType/updateProductType")
     public ResponseEntity<ProductType> updateProductType(@RequestBody ProductType productType) {
         ProductType updatedProductType = productTypeService.updateProductType(productType);
@@ -55,6 +62,7 @@ public class ProductTypeController {
 
     }
 
+    // DELETE a product type by id
     @DeleteMapping("/productType/delete/{productTypeId}")
     public ResponseEntity<ProductType> deleteProductType(@PathVariable long productTypeId) {
         ProductType productType = productTypeService.findProductTypeById(productTypeId);

@@ -1,3 +1,9 @@
+/*
+ * Product Model
+ *      - entity attributes: productId (long), name (string), productType (object), description (string), price (double), size (int), items (set of Items)
+ *      - one to many relationship with Item entity
+ */
+
 package com.project1.warehouse_management.models;
 
 import java.util.Set;

@@ -1,3 +1,7 @@
+/*
+ * WarehouseController - handles incoming HTTP requests for our warehouses
+ */
+
 package com.project1.warehouse_management.controllers;
 
 import java.util.List;
@@ -25,6 +29,7 @@ public class WarehouseController {
     @Autowired
     WarehouseService warehouseService;
 
+    // GET all warehouses in the database
     @GetMapping
     public ResponseEntity<List<Warehouse>> findAllWarehouses() {
         List<Warehouse> warehouses =  warehouseService.findAllWarehouses();
@@ -36,18 +41,21 @@ public class WarehouseController {
         return new ResponseEntity<List<Warehouse>>(warehouses, HttpStatus.OK);
     }
 
+    // GET a warehouse by id
     @GetMapping("warehouse/{warehouseId}")
     public ResponseEntity<Warehouse> findWarehouseById(@PathVariable long warehouseId) {
         Warehouse warehouse = warehouseService.findWarehouseById(warehouseId);
         return new ResponseEntity<Warehouse>(warehouse, HttpStatus.OK);
     }
     
+    // POST a new warehouse
     @PostMapping("/newWarehouse")
     public ResponseEntity<Warehouse> createWarehouse(@RequestBody Warehouse warehouse) {
         Warehouse newWarehouse = warehouseService.createWarehouse(warehouse);
         return new ResponseEntity<Warehouse>(newWarehouse, HttpStatus.CREATED);
     }
 
+    // PUT (update) a warehouse
     @PutMapping("/warehouse/updateWarehouse")
     public ResponseEntity<Warehouse> updateWarehouse(@RequestBody Warehouse warehouse) {
         Warehouse updatedWarehouse = warehouseService.updateWarehouse(warehouse);
@@ -55,6 +63,7 @@ public class WarehouseController {
 
     }
 
+    // DELETE a warehouse by id
     @DeleteMapping("/warehouse/delete/{warehouseId}")
     public ResponseEntity<Warehouse> deleteWarehouse(@PathVariable long warehouseId) {
         Warehouse warehouse = warehouseService.findWarehouseById(warehouseId);

@@ -1,3 +1,7 @@
+/*
+ * ItemController - handles incoming HTTP requests for our items
+ */
+
 package com.project1.warehouse_management.controllers;
 
 import java.util.List;
@@ -25,6 +29,7 @@ public class ItemController {
     ItemService itemService;
 
 
+    // GET all items in the database
     @GetMapping
     public ResponseEntity<List<Item>> findAllItems() {
         List<Item> items = itemService.findAllItems();
@@ -36,6 +41,7 @@ public class ItemController {
         return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
     }
 
+    // GET all items in a specific warehouse
     @GetMapping("/warehouse/{warehouseId}")
     public ResponseEntity<List<Item>> findItemsByWarehouseId(@PathVariable long warehouseId) {
         List<Item> items = itemService.findItemsByWarehouseId(warehouseId);
@@ -47,6 +53,7 @@ public class ItemController {
         return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
     }
 
+    // GET all items based on a product
     @GetMapping("/product/{productId}")
     public ResponseEntity<List<Item>> findItemsByProductId(@PathVariable long productId) {
         List<Item> items = itemService.findItemsByProductId(productId);
@@ -58,6 +65,7 @@ public class ItemController {
         return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
     }
 
+    // GET all items based on a specific product type
     @GetMapping("/productType/{productTypeId}")
     public ResponseEntity<List<Item>> findItemsByProductTypeId(@PathVariable long productTypeId) {
         List<Item> items = itemService.findItemsByProductTypeId(productTypeId);
@@ -69,25 +77,28 @@ public class ItemController {
         return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
     }
 
+    // GET a specific item by id
     @GetMapping("/item/{itemId}")
     public ResponseEntity<Item> findByItemId(@PathVariable long itemId) {
         Item item = itemService.findById(itemId);
         return new ResponseEntity<Item>(item, HttpStatus.OK);
     }
 
+    // POST a new item
     @PostMapping("/newItem")
     public ResponseEntity<Item> createItem(@RequestBody Item item) {
         Item newItem = itemService.createItem(item);
         return new ResponseEntity<Item>(newItem, HttpStatus.CREATED);
     }
 
-    // endpoint for creating a list of new items
+    // POST a list of new items
     @PostMapping("/newItems")
     public ResponseEntity<List<Item>> createItem(@RequestBody List<Item> items) {
         List<Item> newItems = itemService.createItems(items);
         return new ResponseEntity<List<Item>>(newItems, HttpStatus.CREATED);
     }
 
+    // PUT (update) a specific item
     @PutMapping("/item/updateItem")
     public ResponseEntity<Item> updateItem(@RequestBody Item item) {
         Item updatedItem = itemService.updateItem(item);
@@ -95,6 +106,7 @@ public class ItemController {
 
     }
 
+    // DELETE an item by id
     @DeleteMapping("/item/delete/{itemId}")
     public ResponseEntity<Item> deleteItem(@PathVariable long itemId) {
         Item item = itemService.findById(itemId);
@@ -102,7 +114,7 @@ public class ItemController {
         return new ResponseEntity<Item>(HttpStatus.NO_CONTENT);
     }
 
-    // endpoint for deleting a list of items
+    // DELETE a list of items
     @DeleteMapping("/delete/items")
     public ResponseEntity<Item> deleteItems(@RequestBody List<Item> items) {
         itemService.deleteItems(items);

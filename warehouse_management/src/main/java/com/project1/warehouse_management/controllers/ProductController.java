@@ -1,3 +1,7 @@
+/*
+ * ProductController - handles incoming HTTP requests for our products
+ */
+
 package com.project1.warehouse_management.controllers;
 
 import java.util.List;
@@ -25,6 +29,7 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    // GET all products in the database
     @GetMapping
     public ResponseEntity<List<Product>> findAllProducts() {
         List<Product> products =  productService.findAllProducts();
@@ -36,18 +41,21 @@ public class ProductController {
         return new ResponseEntity<List<Product>>(products, HttpStatus.OK);
     }
 
+    // GET a product by id
     @GetMapping("product/{productId}")
     public ResponseEntity<Product> findProductById(@PathVariable long productId) {
         Product product = productService.findProductById(productId);
         return new ResponseEntity<Product>(product, HttpStatus.OK);
     }
     
+    // POST a new product
     @PostMapping("/newProduct")
     public ResponseEntity<Product> createProduct(@RequestBody Product product) {
         Product newProduct = productService.createProduct(product);
         return new ResponseEntity<Product>(newProduct, HttpStatus.CREATED);
     }
 
+    // PUT (update) a product
     @PutMapping("/product/updateProduct")
     public ResponseEntity<Product> updateProduct(@RequestBody Product product) {
         Product updatedProduct = productService.updateProduct(product);
@@ -55,6 +63,7 @@ public class ProductController {
 
     }
 
+    // DELETE a product by id
     @DeleteMapping("/product/delete/{productId}")
     public ResponseEntity<Product> deleteProduct(@PathVariable long productId) {
         Product product = productService.findProductById(productId);
@@ -62,6 +71,7 @@ public class ProductController {
         return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
     }
 
+    // DELETE a list of products
     @DeleteMapping("/delete/products")
     public ResponseEntity<Product> deleteProducts(@RequestBody List<Product> products) {
         productService.deleteProducts(products);

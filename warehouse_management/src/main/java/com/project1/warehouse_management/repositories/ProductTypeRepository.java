@@ -1,3 +1,7 @@
+/*
+ * ProductTypeRepository
+ */
+
 package com.project1.warehouse_management.repositories;
 
 import java.util.Optional;
