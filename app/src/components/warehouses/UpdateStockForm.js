@@ -55,8 +55,8 @@ export default function UpdateStockForm({ handleUpdateStock, warehouse, product,
         })
             .then((res) => res.json())
             .then((data) => {
-                // handleUpdateStock (parameter)
-                // event.target.reset()
+                handleUpdateStock(data)
+                event.target.reset()
             })
             .catch((err) => {
                 console.log(err.message);
@@ -71,10 +71,9 @@ export default function UpdateStockForm({ handleUpdateStock, warehouse, product,
             },
             body: JSON.stringify(itemsToDelete)
         })
-            .then((res) => res.json())
-            .then((data) => {
-                // handleUpdateStock (parameter)
-                // event.target.reset()
+            .then(() => {
+                handleUpdateStock(event)
+                event.target.reset()
             })
             .catch((err) => {
                 console.log(err.message);
@@ -89,10 +88,9 @@ export default function UpdateStockForm({ handleUpdateStock, warehouse, product,
             },
             body: JSON.stringify(itemsToDelete)
         })
-            .then((res) => res.json())
-            .then((data) => {
-                // handleUpdateStock (parameter)
-                // event.target.reset()
+            .then(() => {
+                handleUpdateStock(event)
+                event.target.reset()
             })
             .catch((err) => {
                 console.log(err.message);
@@ -101,7 +99,8 @@ export default function UpdateStockForm({ handleUpdateStock, warehouse, product,
     }
 
     function handleCountChange(event) {
-        if (event.target.value >= 0 && warehouse.capacity >= (event.target.value * product.size + inventoryCountSum)) { setNewCount(event.target.value) }
+        // if (event.target.value >= 0 && warehouse.capacity >= (event.target.value * product.size + inventoryCountSum)) { setNewCount(event.target.value) }
+        if (event.target.value >= 0) { setNewCount(event.target.value) }
     }
 
     return (

@@ -67,16 +67,32 @@ export default function Inventory() {
     };
 
     function handleAddItem(newItem) {
-        setItems((oldState) => {
-            return [...oldState, newItem]
-        })
+        fetch('items')
+            .then((res) => res.json())
+            .then((data) => {
+                setItems(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
     }
 
-    const handleProductChange = (event) => {
-        setNewItemFormData({
-            ...newItemFormData,
-            [event.target.name]: JSON.parse(event.target.value),
-        })
+    function handleUpdateStock(data) {
+        fetch('items')
+            .then((res) => res.json())
+            .then((data) => {
+                setItems(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            }).then(() => fetch('warehouses')
+            .then((res) => res.json())
+            .then((data) => {
+                setWarehouses(data);
+            })
+            .catch((err) => {
+                console.log(err.message);
+            }))
     }
 
     const handleStringInputChange = (event) => {
@@ -339,6 +355,7 @@ export default function Inventory() {
                                                                 existingCount={getItemCountByProductAndWarehouse(warehouse.warehouseId, product.productId)}
                                                                 inventoryCountSum={getInventoryCountSum(warehouse.warehouseId)}
                                                                 items={getItemsByWarehouseIdAndProductId(warehouse.warehouseId, product.productId)}
+                                                                handleUpdateStock={handleUpdateStock}
                                                             ></UpdateStockForm>
                                                         </td>
                                                     </tr>

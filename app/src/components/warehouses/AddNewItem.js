@@ -44,8 +44,8 @@ export default function AddNewItem({ handleAddItem, warehouse, products, invento
             })
                 .then((res) => res.json())
                 .then((data) => {
-                    // handleAddItem(data)
-                    // event.target.reset()
+                    handleAddItem(data)
+                    event.target.reset()
                 })
                 .catch((err) => {
                     console.log(err.message);
@@ -53,13 +53,14 @@ export default function AddNewItem({ handleAddItem, warehouse, products, invento
     }
 
     function handleCountChange(event) {
-        if (event.target.value >= 0 && ((event.target.value * (newProduct == undefined ? products[0].size : newProduct.size) + inventoryCountSum) <= warehouse.capacity)) { setCount(event.target.value) }
-        // if (event.target.value >= 0) { setCount(event.target.value) }
+        // if (event.target.value >= 0 && ((event.target.value * newProduct.size + inventoryCountSum) <= warehouse.capacity)) { setCount(event.target.value) }
+        if (event.target.value >= 0) { setCount(event.target.value) }
     }
 
     function handleProductChange(event) {
         setCount(0)
         setNewProduct(event.target.value)
+
     }
 
     function handleModalClick() {
