@@ -5,18 +5,15 @@ import Row from 'react-bootstrap/Row';
 import CustomModal from "../Modal";
 
 export default function UpdateStockForm({ handleUpdateStock, warehouse, product, existingCount, inventoryCountSum, items }) {
-    // const [warehouse, setWarehouse] = useState()
     const [newCount, setNewCount] = useState(existingCount)
-
-
 
     function handleUpdateStockSubmit(event) {
 
-        if (newCount == existingCount) { }// do nothing
-        else if (newCount == 0) { // delete all items
+        if (newCount == existingCount) { }   // if count hasn't changed, do nothing
+        else if (newCount == 0) {            // if count is set to 0, delete all items
             deleteAllItems(items, event)
         }
-        else if (newCount < existingCount) {
+        else if (newCount < existingCount) { // if new count is less than existing count, delete some items
             const numToDelete = existingCount - newCount;
             let itemsToDelete = [];
             for (let i = 0; i < numToDelete; i++) {
@@ -24,9 +21,7 @@ export default function UpdateStockForm({ handleUpdateStock, warehouse, product,
             }
             deleteSomeItems(itemsToDelete, event)
         }
-        else {
-            //post newCount - existingCount
-
+        else {                               // else (new count is greater than existing count) - add new items
             let quantityToAdd = newCount - existingCount
 
             if (quantityToAdd * product.size + inventoryCountSum > warehouse.capacity) {

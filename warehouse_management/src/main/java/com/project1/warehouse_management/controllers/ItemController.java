@@ -81,6 +81,7 @@ public class ItemController {
         return new ResponseEntity<Item>(newItem, HttpStatus.CREATED);
     }
 
+    // endpoint for creating a list of new items
     @PostMapping("/newItems")
     public ResponseEntity<List<Item>> createItem(@RequestBody List<Item> items) {
         List<Item> newItems = itemService.createItems(items);
@@ -101,6 +102,7 @@ public class ItemController {
         return new ResponseEntity<Item>(HttpStatus.NO_CONTENT);
     }
 
+    // endpoint for deleting a list of items
     @DeleteMapping("/delete/items")
     public ResponseEntity<Item> deleteItems(@RequestBody List<Item> items) {
         itemService.deleteItems(items);

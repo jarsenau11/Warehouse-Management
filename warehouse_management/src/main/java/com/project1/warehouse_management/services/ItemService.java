@@ -58,6 +58,7 @@ public class ItemService {
         return itemRepository.save(item);
     }
 
+    // save all item objects that are passed
     public List<Item> createItems(List<Item> items) {
         return itemRepository.saveAll(items);
     }
@@ -70,6 +71,7 @@ public class ItemService {
         itemRepository.delete(item);
     }
 
+    // delete all item objects that are passed
     public void deleteItems(List<Item> items) {
         itemRepository.deleteAll(items);
     }
