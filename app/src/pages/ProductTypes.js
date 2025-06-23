@@ -38,7 +38,7 @@ export default function Products() {
 
     // Updates product type (if it has changed) and then fetches productTypes so that we can use setProductTypes() to rerender the data
     const handleUpdateProductTypeSubmit = (event) => {
-        if (updateProductTypeFormData == null || updateProductTypeFormData == undefined || updateProductTypeFormData.length == 0) { }
+        if (updateProductTypeFormData == null || updateProductTypeFormData === undefined || updateProductTypeFormData.length === 0) { }
         else {
             fetch('productTypes/productType/updateProductType', {
                 method: 'PUT',
@@ -104,14 +104,14 @@ export default function Products() {
 
     const handleNewProductTypeInputChange = (event) => {
         setNewProductTypeFormData({
-            'value': event.target.value
+            'name': event.target.value
         })
     }
 
     const handleUpdateProductTypeInputChange = (event) => {
         setUpdateProductTypeFormData({
             'productTypeId': event.target.id,
-            'value': event.target.value
+            'name': event.target.value
         })
     }
 
@@ -192,7 +192,7 @@ export default function Products() {
                     {
                         productTypes.map((productType, p) =>
                             <tr key={p}>
-                                <td className="column-width-50">{productType.value}</td>
+                                <td className="column-width-50">{productType.name}</td>
                                 <td className="column-width-25">
                                     <CustomModal
                                         buttonTitle="Update"
@@ -210,7 +210,7 @@ export default function Products() {
                                                         <Form.Label>Product Type</Form.Label>
                                                         <Form.Control
                                                             required
-                                                            defaultValue={productType.value}
+                                                            defaultValue={productType.name}
                                                             id={productType.productTypeId}
                                                             type="text"
                                                             className="form-control"

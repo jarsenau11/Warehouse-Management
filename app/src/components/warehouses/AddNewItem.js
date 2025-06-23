@@ -21,24 +21,24 @@ export default function AddNewItem({ handleAddItem, warehouse, products, invento
 
     // On submit via the modal, build new array of items to add, then check if capacity would be exceeded by adding those items (if yes, don't add, otherwise call addItems())
     function handleAddItemSubmit(event) {
-        if(newProduct == undefined || newProduct == null) {
+        if(newProduct === undefined || newProduct == null) {
             setNewProduct(products[0])
         }
-        if (count == 0) { }// do nothing
+        if (count === 0) { }// do nothing
         else {
             let itemBaseArr = [];
             for (let i = 0; i < count; i++) {
                 itemBaseArr[i] = {
-                    product: newProduct == undefined ? products[0] : JSON.parse(newProduct),
+                    product: newProduct === undefined ? products[0] : JSON.parse(newProduct),
                     warehouse: warehouse
                 }
             }
 
-            if (count * (newProduct == undefined ? products[0].size : newProduct.size) + inventoryCountSum > warehouse.capacity) {
+            if (count * (newProduct === undefined ? products[0].size : newProduct.size) + inventoryCountSum > warehouse.capacity) {
                 console.log('adding this product(s) would exceed the capacity of the warehouse') // exceeds capacity
             }
             else {
-                console.log(count * (newProduct == undefined ? products[0].size : newProduct.size) + inventoryCountSum)
+                console.log(count * (newProduct === undefined ? products[0].size : newProduct.size) + inventoryCountSum)
                 addItems(itemBaseArr, event)
             }
         }

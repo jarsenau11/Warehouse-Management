@@ -108,9 +108,9 @@ export default function UpdateProduct({ handleUpdateProduct, product, productTyp
                         </Form.Group>
                         <Form.Group as={Col} md="6" controlId="type">
                             <Form.Label>Type</Form.Label>
-                            <Form.Select aria-label="Product Type" name="productType" value={productType.value} onChange={handleProductTypeChange}>
+                            <Form.Select aria-label="Product Type" name="productType" value={productType.name} onChange={handleProductTypeChange}>
                                 {productTypes.map((prodType) => (
-                                    <option key={prodType.productTypeId} defaultValue={productType.value} value={JSON.stringify(prodType)}>{prodType.value}</option>
+                                    <option key={prodType.productTypeId} defaultValue={productType.name} value={JSON.stringify(prodType)}>{prodType.value}</option>
                                 ))}
                             </Form.Select>
                         </Form.Group>
