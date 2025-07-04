@@ -187,7 +187,7 @@ export default function Products() {
                                     <Form.Select aria-label="Product Type" name="productType" onChange={handleProductTypeChange}>
                                         <option>Select a product type</option>
                                         {productTypes.map((productType) => (
-                                            <option key={productType.productTypeId} value={JSON.stringify(productType)}>{productType.value}</option>
+                                            <option key={productType.productTypeId} value={JSON.stringify(productType)}>{productType.name}</option>
                                         ))}
                                     </Form.Select>
                                 </Form.Group>
@@ -252,7 +252,7 @@ export default function Products() {
                         products.map((product, p) =>
                             <tr key={p}>
                                 <td>{product.name}</td>
-                                <td>{product.productType.value}</td>
+                                <td>{product.productType.name}</td>
                                 <td>{product.description}</td>
                                 <td>{'$' + product.price.toFixed(2)}</td>
                                 <td>{product.size}</td>

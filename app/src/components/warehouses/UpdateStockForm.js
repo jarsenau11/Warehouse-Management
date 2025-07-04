@@ -22,8 +22,8 @@ export default function UpdateStockForm({ handleUpdateStock, warehouse, product,
 
     // This function performs logic to determine what operation is being requested (add, delete some, or delete all items) and routes to the appropriate function
     function handleUpdateStockSubmit(event) {
-        if (newCount == existingCount) { }   // if count hasn't changed, do nothing
-        else if (newCount == 0) {            // if count is set to 0, delete all items
+        if (newCount === existingCount) { }   // if count hasn't changed, do nothing
+        else if (newCount === 0) {            // if count is set to 0, delete all items
             deleteItems(items, event)
         }
         else if (newCount < existingCount) { // if new count is less than existing count, delete some items

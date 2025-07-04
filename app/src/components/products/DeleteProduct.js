@@ -20,7 +20,7 @@ export default function DeleteProduct({ handleDeleteProduct, product, itemsToDel
     // Function called on submit of the modal which will determine which request should be made
     //      if there are no items, delete the product, otherwise delete the items then the product
     function handleDeleteProductSubmit(event) {
-        if (itemsToDelete == null || itemsToDelete == undefined || itemsToDelete.length == 0) {
+        if (itemsToDelete == null || itemsToDelete === undefined || itemsToDelete.length === 0) {
             deleteProduct(event)
         }
         else {

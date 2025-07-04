@@ -17,7 +17,7 @@ export default function DeleteWarehouse({ handleDeleteWarehouse, warehouse, item
 
     // On submit, route to appropriate function depending on whether or not there are items in the warehouse
     function handleDeleteWarehouseSubmit(event) {
-        if (itemsToDelete == null || itemsToDelete == undefined || itemsToDelete.length == 0) {
+        if (itemsToDelete == null || itemsToDelete === undefined || itemsToDelete.length === 0) {
             deleteWarehouse(event)
         }
         else {

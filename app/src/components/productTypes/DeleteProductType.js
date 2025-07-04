@@ -18,10 +18,10 @@ export default function DeleteProductType({ handleDeleteProductType, productType
 
     // Determines whether there are any items and/or products to delete before the product type, and calls the appropriate function
     function handleDeleteProductTypeSubmit(event) {
-        if ((productsToDelete == null || productsToDelete == undefined || productsToDelete.length == 0) && (itemsToDelete == null || itemsToDelete == undefined || itemsToDelete.length == 0)) {
+        if ((productsToDelete == null || productsToDelete === undefined || productsToDelete.length === 0) && (itemsToDelete == null || itemsToDelete === undefined || itemsToDelete.length === 0)) {
             deleteProductType(event)
         }
-        else if ((itemsToDelete == null || itemsToDelete == undefined || itemsToDelete.length == 0)) {
+        else if ((itemsToDelete == null || itemsToDelete === undefined || itemsToDelete.length === 0)) {
             deleteProductsAndProductType(event)
         }
         else {
@@ -117,7 +117,7 @@ export default function DeleteProductType({ handleDeleteProductType, productType
                     <Row className="mb-3">
                         <Form.Group as={Col} md="8">
                             <Form.Label>Product Type</Form.Label>
-                            <Form.Control disabled value={productType.value}></Form.Control>
+                            <Form.Control disabled value={productType.name}></Form.Control>
                         </Form.Group>
                     </Row>
                 </Form>
